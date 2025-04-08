@@ -1,0 +1,235 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Set B cards{{ endblock }}
+
+{{ block content }}
+
+<!-- Wrapper -->
+<div id="cards-wrapper">
+    <div id="pairs-container">
+        {% for pair in pairs_B %}
+            <div class="pair" id="pair_{{ forloop.counter0 }}" style="display: none;">
+                
+                <!-- Transition Card -->
+                <div class="transition-card" id="transition_{{ forloop.counter0 }}">
+                    <span class="transition-text">Showing next deal...</span>
+                </div>
+
+                <!-- Investment Card -->
+                <div class="investment" id="investment_{{ forloop.counter0 }}">
+                    <span class="investment-text">The gain is: <span class="investment-amount">{{ pair.0 }}</span> ILS</span>
+                </div>
+
+                <!-- Profit Card -->
+                <div class="profit" id="profit_{{ forloop.counter0 }}">
+                    <span class="profit-text">For investment of: <span class="profit-amount">{{ pair.1 }}</span> ILS</span>
+                </div>
+
+                <!-- Next Pair Button (initially hidden) -->
+                <div class="next-pair-container" id="next-pair-btn-{{ forloop.counter0 }}">
+                    <button class="next-pair-button" onclick="handleNextPair()">Next</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Final oTree Next Button (initially hidden) -->
+<div id="final-next-button" style="display: none; text-align: center; margin-top: 20px;">
+    {{ next_button }}
+</div>
+
+<style>
+    #cards-wrapper {
+        position: relative;
+        width: 70%;
+        height: 220px;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .pair {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .transition-card, .investment, .profit {
+        width: 100%;
+        height: 100px;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 1.1em;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        opacity: 0;
+        transform: scale(0.9);
+        transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+        padding-top: 30px;
+    }
+
+    .transition-card.show,
+    .investment.show,
+    .profit.show {
+        opacity: 1;
+        transform: scale(1);
+        z-index: 2;
+    }
+
+    .transition-card {
+        top: 0;
+        height: 100%;
+        background-color: #e0e0e0;
+        border-left: 8px solid gray;
+        color: #4f4f4f;
+    }
+
+    .investment {
+        top: 0;
+        background-color: #e0f0ff;
+        border-left: 8px solid blue;
+        color: #004080;
+    }
+
+    .profit {
+        top: 110px;
+        background-color: #fff8e0;
+        border-left: 8px solid #f5ce42;
+        color: #b38b00;
+    }
+
+    .next-pair-container {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+    }
+
+    .next-pair-button {
+        padding: 10px 20px;
+        background-color: #444;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .next-pair-button:hover {
+        background-color: #222;
+    }
+</style>
+
+<script>
+    let autoAdvanceTimer = null;
+    let currentPairIndex = 0;
+    const totalPairs = 2;
+    let isPairVisible = false;
+    let isLoopPaused = false;
+    let isAllPairsShown = false;
+    
+    function showPair(index) {
+        const pair = document.getElementById("pair_" + index);
+        const transition = document.getElementById("transition_" + index);
+        const investment = document.getElementById("investment_" + index);
+        const profit = document.getElementById("profit_" + index);
+        const nextBtnContainer = document.getElementById("next-pair-btn-" + index);
+    
+        pair.style.display = "block";
+        transition.style.display = "block";
+    
+        // Show gray transition card
+        setTimeout(() => {
+            transition.classList.add("show");
+    
+            // Fade out gray transition after 2.5s
+            setTimeout(() => {
+                transition.classList.remove("show");
+    
+                // Hide gray card completely after fade-out
+                setTimeout(() => {
+                    transition.style.display = "none";
+    
+                    // Show red investment card
+                    investment.style.display = "block";
+                    setTimeout(() => investment.classList.add("show"), 10);
+    
+                    // Show profit card after 3s
+                    setTimeout(() => {
+                        profit.style.display = "block";
+                        setTimeout(() => profit.classList.add("show"), 10);
+    
+                        // Hide both after 3s
+                        setTimeout(() => {
+                            investment.classList.remove("show");
+                            profit.classList.remove("show");
+    
+                            // Fully hide and show next button
+                            setTimeout(() => {
+                                investment.style.display = "none";
+                                profit.style.display = "none";
+                                nextBtnContainer.style.display = "block";
+    
+                                isPairVisible = true;
+    
+                                // ⏱️ Start auto-advance timer
+                                autoAdvanceTimer = setTimeout(() => {
+                                    handleNextPair();
+                                }, 5000); // Directly call handleNextPair() when the timer runs out
+                            }, 500); // hide delay
+                        }, 3000); // profit visible duration
+                    }, 3000); // wait to show profit
+                }, 500); // fade-out gray
+            }, 2500); // gray visible duration
+        }, 10); // small delay to trigger gray show transition
+    }
+    
+    function handleNextPair() {
+        clearTimeout(autoAdvanceTimer);
+        autoAdvanceTimer = null;
+    
+        if (isLoopPaused) return;
+    
+        document.getElementById("pair_" + currentPairIndex).style.display = "none";
+        currentPairIndex++;
+    
+        if (currentPairIndex < totalPairs) {
+            isPairVisible = false;
+            showPair(currentPairIndex);
+        } else {
+            isAllPairsShown = true;
+            const form = document.querySelector('form'); // Assuming you have a form element
+            if (form) {
+            form.submit();  // This triggers the form submission and moves to the next page
+            }
+    
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        showPair(currentPairIndex);
+    });
+    
+    $(document).ready(function () {
+        $("form").submit(function (event) {
+            if (!isAllPairsShown) {
+                event.preventDefault();
+              return false;
+            }
+            return true;
+        });
+    });
+    
+    
+</script>
+
+{{ endblock }}

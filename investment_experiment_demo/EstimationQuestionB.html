@@ -1,0 +1,30 @@
+{% extends "global/Page.html" %}
+{% block content %}
+
+<p>
+    You have just observed 36 cases of the outcomes that were received by individuals who made 
+    investments of varying amounts. Before we move on to the next part of the experiment, we would 
+    like to assess your understanding of the situation.
+</p>
+<p>
+    Imagine yourself in the same scenario receiving an outcome after making an investment.  You   
+    try to predict whether the situation is likely to result in a gain or a loss <u>for you</u>. 
+</p>
+<p>Click on the option that best describes your belief.</p>
+<p>Do you believe that your <strong>outcome</strong> would be </p>
+
+<form method="post">
+    {{ formfield_errors 'estimate_B' }}
+
+    <label><input type="radio" name="estimate_B" value="1"> <strong>Much greater than</strong> the investment you made?  (a gain)</label><br>
+    <label><input type="radio" name="estimate_B" value="2"> <strong>Greater than</strong> the investment you made?  </label><br>
+    <label><input type="radio" name="estimate_B" value="3"> <strong>Equal to</strong> the investment you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="4"> <strong>Less than</strong> the investment you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="5"> <strong>Much less than</strong> the investment you made? (a loss)</label><br>
+
+    <br>
+    <button class="btn btn-primary">Next</button>
+</form>
+
+
+{% endblock %}

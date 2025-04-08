@@ -1,0 +1,18 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Final Results{{ endblock }}
+
+{{ block content }}
+
+<p style="font-size: 22px; color: black;">
+The investment chosen was {{player.random_investment}} and the gain chosen is {{player.random_gain}} for a total bonus of {{player.bonus}}
+</p>
+
+<p style="font-size: 22px; color: black;">
+This adds up for a total of {{player.payoff}}.
+</p>
+
+<p style="font-size: 22px; color: black;">
+thank you for participating.
+</p>
+
+{{ endblock }}
