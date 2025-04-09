@@ -4,18 +4,16 @@
 
 {% block content %}
     <p style="font-size: 22px; color: black;">
-        Please enter the final gain you saw:
+        What was the outcome that appeared on the card just presented?
     </p>
 
     <form method="post">
-        <p>What was the final gain shown?</p>
         <input name="awareness_answer" type="number" required>
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
     </form>
-
 
     {% if player.error_count > 1 %}
         <p style="color: red;">You have answered incorrectly too many times. You will be redirected.</p>
     {% endif %}
-    
+
 {% endblock %}

@@ -1,5 +1,5 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}Set B cards{{ endblock }}
+{{ block title }}{{ endblock }}
 
 {{ block content }}
 
@@ -11,17 +11,17 @@
                 
                 <!-- Transition Card -->
                 <div class="transition-card" id="transition_{{ forloop.counter0 }}">
-                    <span class="transition-text">Showing next deal...</span>
+                    <span class="transition-text">Showing next case...</span>
                 </div>
 
                 <!-- Investment Card -->
                 <div class="investment" id="investment_{{ forloop.counter0 }}">
-                    <span class="investment-text">The gain is: <span class="investment-amount">{{ pair.0 }}</span> ILS</span>
+                    <span class="investment-text">Individual received outcome <span class="investment-amount">{{ pair.0 }}</span></span>
                 </div>
 
                 <!-- Profit Card -->
                 <div class="profit" id="profit_{{ forloop.counter0 }}">
-                    <span class="profit-text">For investment of: <span class="profit-amount">{{ pair.1 }}</span> ILS</span>
+                    <span class="profit-text">after having made an investment <span class="profit-amount">{{ pair.1 }}</span></span>
                 </div>
 
                 <!-- Next Pair Button (initially hidden) -->
@@ -132,7 +132,8 @@
 <script>
     let autoAdvanceTimer = null;
     let currentPairIndex = 0;
-    const totalPairs = 2;
+    const totalPairs = {{ player.num_pairs }};
+    const responseTime = {{ player.response_time }};
     let isPairVisible = false;
     let isLoopPaused = false;
     let isAllPairsShown = false;
@@ -184,7 +185,7 @@
                                 // ⏱️ Start auto-advance timer
                                 autoAdvanceTimer = setTimeout(() => {
                                     handleNextPair();
-                                }, 5000); // Directly call handleNextPair() when the timer runs out
+                                }, responseTime); // Directly call handleNextPair() when the timer runs out
                             }, 500); // hide delay
                         }, 3000); // profit visible duration
                     }, 3000); // wait to show profit

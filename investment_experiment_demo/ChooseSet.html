@@ -3,16 +3,37 @@
 
 {{ block content }}
 
-<p style="font-size: 22px; color: black;">
-    Lastly, you will be granted an additional 20 ILS to your final reward. Please select one of the two sets of cards you just watch.
-</p>
-<p style="font-size: 22px; color: black;">
-    one pair of cards from your selected set will be randomly chosen. It's investment value will be subtructed from your total value while it's gain will be added to your total value.
-</p>   
+<title>Market Selection</title>
+    <style>
+        .highlight {
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <p>You have observed two different sets of investment/outcome cases, which we will refer to as two separate "markets":</p>
 
+    <p><span class="highlight">Market 1:</span> In this market you reviewed 36 cases, where each case described an individual making an investment of a specific amount and the outcome they received following that investment.</p>
 
-{{ formfields }}
+    <p><span class="highlight">Market 2:</span> In this market you reviewed 36 cases, where each case described an individual receiving an outcome of a specific amount and the investment they made prior to receiving that outcome.</p>
 
-{{ next_button }}
+    <p>Now, you have the opportunity to earn a bonus. We start by giving you 50 extra points.</p>
+
+    <p>Now we would like you to choose one of the two markets you were presented with during the experiment. Once you choose a market, we will draw at random one card from that market. You will pay the investment specified on the card and will receive the outcome on that card.</p>
+
+    <p>Please note that your final bonus may be higher or lower than the initial 50 points, depending on the result—but it will always be positive. Your bonus will be converted into cash at a rate of one penny per point, and added to your payment for participation.</p>
+
+    <h4>Which market do you prefer to invest in? (Market 1 or Market 2)</h4>
+
+    <form method="post">
+        {{ formfield_errors 'chosen_market' }}
+    
+        <label><input type="radio" name="chosen_market" value="1"> Market 1</label><br>
+        <label><input type="radio" name="chosen_market" value="2"> Market 2</label><br>
+    
+        <br>
+        <button class="btn btn-primary">Next</button>
+    </form>
 
 {{ endblock }}

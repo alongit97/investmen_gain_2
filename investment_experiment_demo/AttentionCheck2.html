@@ -4,13 +4,12 @@
 
 {% block content %}
     <p style="font-size: 22px; color: black;">
-        Please enter the final gain you saw:
+        What was the investment that appeared on the card just presented?
     </p>
 
     <form method="post">
-        <p>What was the final gain shown?</p>
         <input name="awareness_answer" type="number" required>
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
     </form>
 
     {% if player.error_count > 1 %}

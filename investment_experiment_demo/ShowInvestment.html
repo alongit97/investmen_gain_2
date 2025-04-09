@@ -1,5 +1,5 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}Set A cards{{ endblock }}
+{{ block title }}{{ endblock }}
 
 {{ block content }}
 
@@ -11,17 +11,17 @@
                 
                 <!-- Transition Card -->
                 <div class="transition-card" id="transition_{{ forloop.counter0 }}">
-                    <span class="transition-text">Showing next deal...</span>
+                    <span class="transition-text">Showing next case...</span>
                 </div>
 
                 <!-- Investment Card -->
                 <div class="investment" id="investment_{{ forloop.counter0 }}">
-                    <span class="investment-text">For investment of: <span class="investment-amount">{{ pair.0 }}</span> ILS</span>
+                    <span class="investment-text">Individual invested <span class="investment-amount">{{ pair.0 }}</span></span>
                 </div>
 
                 <!-- Profit Card -->
                 <div class="profit" id="profit_{{ forloop.counter0 }}">
-                    <span class="profit-text">The gain was: <span class="profit-amount">{{ pair.1 }}</span> ILS</span>
+                    <span class="profit-text">They received outcome <span class="profit-amount">{{ pair.1 }}</span></span>
                 </div>
 
                 <!-- Next Pair Button (initially hidden) -->
@@ -132,8 +132,8 @@
 <script>
 let autoAdvanceTimer = null;
 let currentPairIndex = 0;
-const totalPairs = {{ subsession.num_pairs }};
-const responseTime = {{ subsession.response_time }};
+const totalPairs = {{ player.num_pairs }};
+const responseTime = {{ player.response_time }};
 let isPairVisible = false;
 let isLoopPaused = false;
 let isAllPairsShown = false;

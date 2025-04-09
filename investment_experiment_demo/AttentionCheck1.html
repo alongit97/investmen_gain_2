@@ -1,15 +1,27 @@
-{% extends 'global/Page.html' %}
-
-{% block title %}Attention Check 1{% endblock %}
+{% extends "global/Page.html" %}
+{% block title %}{% endblock %}
 
 {% block content %}
-    <p style="font-size: 22px; color: black;">
-        Are you aware?
-    </p>
+  <p><strong>First, please answer the following two simple questions. If you fail, you will not be
+    allowed to take part in the study.</strong></p>
 
-    <p style="font-size: 22px; color: black;">
-        Please continue.
-    </p>    
+  <form method="post">
+    <div class="form-group">
+      <label for="id_attention1_q1">1. What is the sum of one and three? (write down your answer in letters)</label>
+      {{ form.attention1_q1 }}
+      {% if form.attention1_q1.errors %}
+        <div style="color: red;">{{ form.attention1_q1.errors.0 }}</div>
+      {% endif %}
+    </div>
 
-    {{ next_button }}
+    <div class="form-group mt-3">
+      <label for="id_attention1_q2">2. What word would you get if you combine the first and last letters of the sentence “Anyone can do that”?</label>
+      {{ form.attention1_q2 }}
+      {% if form.attention1_q2.errors %}
+        <div style="color: red;">{{ form.attention1_q2.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <button class="btn btn-primary mt-4">Next</button>
+  </form>
 {% endblock %}
