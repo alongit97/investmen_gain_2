@@ -62,7 +62,7 @@ class Player(BasePlayer):
     attention1_q1 = models.StringField(default="" ,label="What is the sum of one and three? (write down your answer in letters)")
     attention1_q2 = models.StringField(default="" ,label="What word would you get if you combine the first and last letters of the sentence 'Anyone can do that'.")
 
-    num_pairs = models.IntegerField(initial=1, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
+    num_pairs = models.IntegerField(initial=4, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
     response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 1000)
     transition_time = models.IntegerField(initial=2500, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
     first_card_time = models.IntegerField(initial=1500, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
