@@ -62,9 +62,11 @@ class Player(BasePlayer):
     attention1_q1 = models.StringField(default="" ,label="What is the sum of one and three? (write down your answer in letters)")
     attention1_q2 = models.StringField(default="" ,label="What word would you get if you combine the first and last letters of the sentence 'Anyone can do that'.")
 
-    num_pairs = models.IntegerField(initial=12, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
+    num_pairs = models.IntegerField(initial=1, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
     response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 1000)
-
+    transition_time = models.IntegerField(initial=2500, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
+    first_card_time = models.IntegerField(initial=1500, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
+    second_card_time = models.IntegerField(initial=2500, verbose_name="Time for both cards to apear together(in milliseconds)", min = 1)
 
     def set_random_pairs(self, full_pairs):
         pairs_A = full_pairs[:]
@@ -73,27 +75,37 @@ class Player(BasePlayer):
         random.shuffle(pairs_B)
         self.pairs_A_all = json.dumps(pairs_A)
         self.pairs_B_all = json.dumps(pairs_B)
-
+ 
 class ClientSettingsPage(Page):
     form_model = 'player'
-    form_fields = ['num_pairs', 'response_time']
+    form_fields = [
+        'num_pairs',
+        'response_time',
+        'first_card_time',
+        'second_card_time',
+        'transition_time'
+    ]
 
     @staticmethod
     def vars_for_template(player: Player):
         return {
             'current_num_pairs': player.num_pairs,
-            'current_response_time': player.response_time
+            'current_response_time': player.response_time,
+            'current_first_card_time': player.first_card_time,
+            'current_second_card_time': player.second_card_time,
+            'current_transition_time': player.transition_time
         }
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        print("ClientSettingsPage - num_pairs:", player.num_pairs)
-        print("ClientSettingsPage - response_time:", player.response_time)
-
 
 
 class Instructions(Page):
-    pass
+    form_model = 'player'
+    form_fields = ['error_count']  # Use the existing 'error_count' field to capture agree/disagree
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # Check if the player disagreed (error_count = 100)
+        if player.error_count == 100:
+            player.participant.vars['is_disqualified'] = True  # Mark the player as disqualified
 
 class AttentionCheck1(Page):
     form_model = 'player'
@@ -110,6 +122,7 @@ class AttentionCheck1(Page):
         # Check if already failed once
         if player.participant.vars.get('attention_check_1_failed_once'):
             # Second failure: disqualify and allow to move forward silently
+            player.error_count = 200
             player.participant.vars['is_disqualified'] = True
             return  # No error messages, move on
         else:
@@ -154,6 +167,7 @@ class ShowInvestment(Page):
 class AttentionCheck2(Page):
     form_model = 'player'
     form_fields = ['awareness_answer']
+    
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
@@ -161,6 +175,8 @@ class AttentionCheck2(Page):
     def vars_for_template(player: Player):
         pairs_A = player.participant.vars.get('current_pairs_A', [])
         final_investment = pairs_A[-1][0] if pairs_A else None
+        # Store the correct answer in a single variable for the last attention check
+        player.participant.vars['correct_answer_last_attention_check'] = final_investment
         return {'final_investment': final_investment}
 
     @staticmethod
@@ -198,6 +214,7 @@ class ReverseShowProfit(Page):
 class AttentionCheck3(Page):
     form_model = 'player'
     form_fields = ['awareness_answer']
+    
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
@@ -205,6 +222,8 @@ class AttentionCheck3(Page):
     def vars_for_template(player: Player):
         pairs_B = player.participant.vars.get('current_pairs_B', [])
         final_gain = pairs_B[-1][0] if pairs_B else None
+        # Store the correct answer in the same variable for the last attention check
+        player.participant.vars['correct_answer_last_attention_check'] = final_gain
         return {'final_gain': final_gain}
 
     @staticmethod
@@ -245,6 +264,24 @@ class FinalPage(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
+class WarningPage(Page):
+    #timeout_seconds = 5  # Show this page for 5 seconds only
+
+    def is_displayed(player: Player):
+        return player.error_count == 1 and not player.participant.vars.get('has_seen_warning', False)
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        correct_answer = player.participant.vars.get('correct_answer_last_attention_check', None)
+        return {
+            'correct_answer': correct_answer,
+            'message': 'The correct answer was: '
+        }
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.participant.vars['has_seen_warning'] = True     
+
 class Disqualified(Page):
     def is_displayed(player: Player):
         return player.participant.vars.get('is_disqualified', False)
@@ -260,16 +297,20 @@ page_sequence = [
     BeforePartA,
     ShowInvestment,
     AttentionCheck2,
+    WarningPage,
     ShowInvestment,
     AttentionCheck2,
+    WarningPage,
     ShowInvestment,
     #AttentionCheck2,
     EstimationQuestionA,
     BeforePartB,
     ReverseShowProfit,
     AttentionCheck3,
+    WarningPage,
     ReverseShowProfit,
     AttentionCheck3,
+    WarningPage,
     ReverseShowProfit,
     #AttentionCheck3,
     EstimationQuestionB,

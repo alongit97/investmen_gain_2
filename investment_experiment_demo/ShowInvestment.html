@@ -134,6 +134,9 @@ let autoAdvanceTimer = null;
 let currentPairIndex = 0;
 const totalPairs = {{ player.num_pairs }};
 const responseTime = {{ player.response_time }};
+const transitionTime = {{ player.transition_time }};
+const firstCardTime = {{ player.first_card_time }};
+const secondCardTime = {{ player.second_card_time }};
 let isPairVisible = false;
 let isLoopPaused = false;
 let isAllPairsShown = false;
@@ -187,10 +190,10 @@ function showPair(index) {
                                 handleNextPair();
                             }, responseTime); // Directly call handleNextPair() when the timer runs out
                         }, 500); // hide delay
-                    }, 3000); // profit visible duration
-                }, 3000); // wait to show profit
+                    }, secondCardTime); // profit visible duration
+                }, firstCardTime); // wait to show profit
             }, 500); // fade-out gray
-        }, 2500); // gray visible duration
+        }, transitionTime); // gray visible duration
     }, 10); // small delay to trigger gray show transition
 }
 

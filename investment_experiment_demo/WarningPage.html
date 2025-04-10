@@ -1,0 +1,13 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+    <div style="text-align: center; padding: 40px;">
+        <h2 style="color: red;">⚠️ Incorrect Answer</h2>
+        <p>You answered incorrectly.</p>
+
+        <p>{{ message }} <strong>{{ correct_answer }}</strong>.</p>
+
+        <p><strong><span style="color: red;">NOTE:</span></strong> you will not be allowed to make another mistake.</p>
+        <button class="btn btn-primary" type="submit">Next</button>
+    </div>
+{% endblock %}

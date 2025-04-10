@@ -130,105 +130,108 @@
 </style>
 
 <script>
-    let autoAdvanceTimer = null;
-    let currentPairIndex = 0;
-    const totalPairs = {{ player.num_pairs }};
-    const responseTime = {{ player.response_time }};
-    let isPairVisible = false;
-    let isLoopPaused = false;
-    let isAllPairsShown = false;
-    
-    function showPair(index) {
-        const pair = document.getElementById("pair_" + index);
-        const transition = document.getElementById("transition_" + index);
-        const investment = document.getElementById("investment_" + index);
-        const profit = document.getElementById("profit_" + index);
-        const nextBtnContainer = document.getElementById("next-pair-btn-" + index);
-    
-        pair.style.display = "block";
-        transition.style.display = "block";
-    
-        // Show gray transition card
+let autoAdvanceTimer = null;
+let currentPairIndex = 0;
+const totalPairs = {{ player.num_pairs }};
+const responseTime = {{ player.response_time }};
+const transitionTime = {{ player.transition_time }};
+const firstCardTime = {{ player.first_card_time }};
+const secondCardTime = {{ player.second_card_time }};
+let isPairVisible = false;
+let isLoopPaused = false;
+let isAllPairsShown = false;
+
+function showPair(index) {
+    const pair = document.getElementById("pair_" + index);
+    const transition = document.getElementById("transition_" + index);
+    const investment = document.getElementById("investment_" + index);
+    const profit = document.getElementById("profit_" + index);
+    const nextBtnContainer = document.getElementById("next-pair-btn-" + index);
+
+    pair.style.display = "block";
+    transition.style.display = "block";
+
+    // Show gray transition card
+    setTimeout(() => {
+        transition.classList.add("show");
+
+        // Fade out gray transition after 2.5s
         setTimeout(() => {
-            transition.classList.add("show");
-    
-            // Fade out gray transition after 2.5s
+            transition.classList.remove("show");
+
+            // Hide gray card completely after fade-out
             setTimeout(() => {
-                transition.classList.remove("show");
-    
-                // Hide gray card completely after fade-out
+                transition.style.display = "none";
+
+                // Show red investment card
+                investment.style.display = "block";
+                setTimeout(() => investment.classList.add("show"), 10);
+
+                // Show profit card after 3s
                 setTimeout(() => {
-                    transition.style.display = "none";
-    
-                    // Show red investment card
-                    investment.style.display = "block";
-                    setTimeout(() => investment.classList.add("show"), 10);
-    
-                    // Show profit card after 3s
+                    profit.style.display = "block";
+                    setTimeout(() => profit.classList.add("show"), 10);
+
+                    // Hide both after 3s
                     setTimeout(() => {
-                        profit.style.display = "block";
-                        setTimeout(() => profit.classList.add("show"), 10);
-    
-                        // Hide both after 3s
+                        investment.classList.remove("show");
+                        profit.classList.remove("show");
+
+                        // Fully hide and show next button
                         setTimeout(() => {
-                            investment.classList.remove("show");
-                            profit.classList.remove("show");
+                            investment.style.display = "none";
+                            profit.style.display = "none";
+                            nextBtnContainer.style.display = "block";
+
+                            isPairVisible = true;
+
+                            //Start auto-advance timer
+                            autoAdvanceTimer = setTimeout(() => {
+                                handleNextPair();
+                            }, responseTime); // Directly call handleNextPair() when the timer runs out
+                        }, 500); // hide delay
+                    }, secondCardTime); // profit visible duration
+                }, firstCardTime); // wait to show profit
+            }, 500); // fade-out gray
+        }, transitionTime); // gray visible duration
+    }, 10); // small delay to trigger gray show transition
+}
     
-                            // Fully hide and show next button
-                            setTimeout(() => {
-                                investment.style.display = "none";
-                                profit.style.display = "none";
-                                nextBtnContainer.style.display = "block";
-    
-                                isPairVisible = true;
-    
-                                // ⏱️ Start auto-advance timer
-                                autoAdvanceTimer = setTimeout(() => {
-                                    handleNextPair();
-                                }, responseTime); // Directly call handleNextPair() when the timer runs out
-                            }, 500); // hide delay
-                        }, 3000); // profit visible duration
-                    }, 3000); // wait to show profit
-                }, 500); // fade-out gray
-            }, 2500); // gray visible duration
-        }, 10); // small delay to trigger gray show transition
-    }
-    
-    function handleNextPair() {
-        clearTimeout(autoAdvanceTimer);
-        autoAdvanceTimer = null;
-    
-        if (isLoopPaused) return;
-    
-        document.getElementById("pair_" + currentPairIndex).style.display = "none";
-        currentPairIndex++;
-    
-        if (currentPairIndex < totalPairs) {
-            isPairVisible = false;
-            showPair(currentPairIndex);
-        } else {
-            isAllPairsShown = true;
-            const form = document.querySelector('form'); // Assuming you have a form element
-            if (form) {
-            form.submit();  // This triggers the form submission and moves to the next page
-            }
-    
-        }
-    }
-    
-    document.addEventListener("DOMContentLoaded", () => {
+function handleNextPair() {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+
+    if (isLoopPaused) return;
+
+    document.getElementById("pair_" + currentPairIndex).style.display = "none";
+    currentPairIndex++;
+
+    if (currentPairIndex < totalPairs) {
+        isPairVisible = false;
         showPair(currentPairIndex);
+    } else {
+        isAllPairsShown = true;
+        const form = document.querySelector('form'); // Assuming you have a form element
+        if (form) {
+        form.submit();  // This triggers the form submission and moves to the next page
+        }
+
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    showPair(currentPairIndex);
+});
+
+$(document).ready(function () {
+    $("form").submit(function (event) {
+        if (!isAllPairsShown) {
+            event.preventDefault();
+            return false;
+        }
+        return true;
     });
-    
-    $(document).ready(function () {
-        $("form").submit(function (event) {
-            if (!isAllPairsShown) {
-                event.preventDefault();
-              return false;
-            }
-            return true;
-        });
-    });
+});
     
     
 </script>

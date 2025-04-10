@@ -3,11 +3,35 @@
 {% block title %}Disqualified{% endblock %}
 
 {% block content %}
-    <p style="font-size: 22px; color: red;">
-        You have been disqualified from the experiment due to too many incorrect answers.
-    </p>
+    {% if player.error_count == 2 %}
+        <p style="font-size: 22px; color: red;">
+            You have been disqualified from the experiment due to too many incorrect answers.
+        </p>
 
-    <p style="font-size: 18px; color: black;">
-        Please contact the experiment administrator for more details.
-    </p>
+        <p style="font-size: 18px; color: black;">
+            Please contact the experiment administrator for more details.
+        </p>
+    {% elif player.error_count == 100 %}
+        <p style="font-size: 22px; color: red;">
+            You diceded not to agree to the terms and cancel your participation.
+        </p>
+        <p style="font-size: 22px;"> thank you</p>
+
+    {% elif player.error_count == 200 %}
+        <p style="font-size: 22px; color: red;">
+            You have been disqualified from the experiment because you failed to answer the authentication questions.
+        </p>
+
+        <p style="font-size: 18px; color: black;">
+            Please contact the experiment administrator for more details.
+        </p>
+    {% else %}
+        <p style="font-size: 22px; color: red;">
+            You have been disqualified from the experiment due to an unknown reason.
+        </p>
+
+        <p style="font-size: 18px; color: black;">
+            Please contact the experiment administrator for more details.
+        </p>
+    {% endif %}
 {% endblock %}
