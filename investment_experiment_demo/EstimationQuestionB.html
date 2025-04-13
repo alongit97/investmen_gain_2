@@ -12,17 +12,16 @@
     Imagine yourself in the same scenario receiving an outcome after making an investment.  You   
     try to predict whether the situation is likely to result in a gain or a loss <u>for you</u>. 
 </p>
-<p>Click on the option that best describes your belief.</p>
-<p>Do you believe that your <strong>outcome</strong> would be </p>
+<p>Which of the following best describes your belief?</p>
 
 <form method="post">
     {{ formfield_errors 'estimate_B' }}
 
-    <label><input type="radio" name="estimate_B" value="1"> Much greater than the investment you made? <strong>(lare gain)</strong></label><br>
-    <label><input type="radio" name="estimate_B" value="2"> Greater than the investment you made?<strong>(small gain)</strong></label></label><br>
-    <label><input type="radio" name="estimate_B" value="3"> Equal to the investment you made?</label><br>
-    <label><input type="radio" name="estimate_B" value="4"> Less than the investment you made?</label><strong>(small loss)</strong></label><br>
-    <label><input type="radio" name="estimate_B" value="5"> Much less than the investment you made? <strong>(large loss)</strong></label><br>
+    <label><input type="radio" name="estimate_B" value="1"> Your <strong>outcome</strong> would be <strong>much greater than</strong> the investment you made? <strong>(a lare gain)</strong></label><br>
+    <label><input type="radio" name="estimate_B" value="2"> Your <strong>outcome</strong> would be <strong>greater than</strong> the investment you made?<strong>(a small gain)</strong></label></label><br>
+    <label><input type="radio" name="estimate_B" value="3"> Your <strong>outcome</strong> would be <strong>equal to</strong> the investment you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="4"> Your <strong>outcome</strong> would be <strong>less than</strong> the investment you made?</label><strong>(a small loss)</strong></label><br>
+    <label><input type="radio" name="estimate_B" value="5"> Your <strong>outcome</strong> would be <strong>much less than</strong> the investment you made? <strong>(a large loss)</strong></label><br>
     
     <br>
     <button class="btn btn-primary">Next</button>
