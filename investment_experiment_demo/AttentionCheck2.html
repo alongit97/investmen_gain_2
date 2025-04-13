@@ -3,8 +3,14 @@
 {% block title %}Attention Check{% endblock %}
 
 {% block content %}
+    
     <p style="font-size: 22px; color: black;">
-        What was the <span style="color: red;">investment</span> that appeared on the card just presented?
+        {% if session.config.investment_before_outcome %}
+            What was the <span style="color: red;">investment</span> that appeared on the card just presented?
+        {% else %}
+        What was the <span style="color: red;">outcome</span> that appeared on the card just presented?
+        {% endif %}
+
     </p>
 
     <form method="post">

@@ -18,7 +18,7 @@ class Subsession(BaseSubsession):
 
 def creating_session(subsession: 'Subsession'):
     session = subsession.session
-    file_path = "Items_to_Present_Inv-Vee_3_Pres-Inc-then-Inv_Ask-FIRST-Inc-per-Unit-Inv.xlsx"
+    file_path = session.config['file_name']
     df = pd.read_excel(file_path, usecols="I,K", skiprows=1, nrows=36, header=None)
     df.columns = ['Investment', 'Gain']
     session.full_pairs = list(zip(df['Investment'], df['Gain']))
@@ -302,7 +302,6 @@ page_sequence = [
     AttentionCheck2,
     WarningPage,
     ShowInvestment,
-    #AttentionCheck2,
     EstimationQuestionA,
     BeforePartB,
     ReverseShowProfit,
@@ -312,7 +311,6 @@ page_sequence = [
     AttentionCheck3,
     WarningPage,
     ReverseShowProfit,
-    #AttentionCheck3,
     EstimationQuestionB,
     ChooseSet,
     BonusCalculation,

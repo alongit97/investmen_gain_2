@@ -16,12 +16,22 @@
 
                 <!-- Investment Card -->
                 <div class="investment" id="investment_{{ forloop.counter0 }}">
-                    <span class="investment-text">Individual invested <span class="investment-amount">{{ pair.0 }}</span></span>
+                    <span class="investment-text">
+                        {% if session.config.investment_before_outcome %}
+                            Individual invested <span class="investment-amount">{{ pair.0 }}</span>
+                        {% else %}
+                            Individual received outcome <span class="investment-amount">{{ pair.0 }}</span>
+                        {% endif %}
+                    </span>
                 </div>
 
                 <!-- Profit Card -->
                 <div class="profit" id="profit_{{ forloop.counter0 }}">
-                    <span class="profit-text">They received outcome <span class="profit-amount">{{ pair.1 }}</span></span>
+                    {% if session.config.investment_before_outcome %}
+                        <span class="profit-text">They received outcome <span class="profit-amount">{{ pair.1 }}</span></span>
+                    {% else %}
+                        <span class="profit-text">after having made an investment <span class="profit-amount">{{ pair.1 }}</span></span>
+                    {% endif %}
                 </div>
 
                 <!-- Next Pair Button (initially hidden) -->
@@ -140,6 +150,8 @@ const secondCardTime = {{ player.second_card_time }};
 let isPairVisible = false;
 let isLoopPaused = false;
 let isAllPairsShown = false;
+//let test = "{{session.config.file_name}}";
+
 
 function showPair(index) {
     const pair = document.getElementById("pair_" + index);

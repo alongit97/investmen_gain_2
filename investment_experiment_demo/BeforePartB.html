@@ -3,11 +3,20 @@
 {{ block content }}
 <h3>Instructions Before Series 2</h3>
 
-<p>In the next section, you will, again, review 36 cases, each describing the specific outcome an
-individual received after having made a certain investment. Each case follows this format:</p>
 
-<p style="color: blue;"><strong>Individual received outcome X.</strong></p>
-<p style="color: #cbb406;"><strong>after having made an investment Y.</strong></p>
+{% if session.config.investment_before_outcome %}
+    <p>In the next section, you will, again, review 36 cases, each describing the specific outcome an
+    individual received after having made a certain investment. Each case follows this format:</p>
+
+    <p style="color: blue;"><strong>Individual received outcome X.</strong></p>
+    <p style="color: #cbb406;"><strong>after having made an investment Y.</strong></p>
+{% else %}
+    <p>In the next section, you will, again, review 36 cases, each describing the specific investment an
+    individual made and the outcome that followed it. Each case follows this format:</p>
+
+    <p style="color: blue;"><strong>Individual invested X.</strong></p>
+    <p style="color: #cbb406;"><strong>They received outcome Y.</strong></p>
+{% endif %}            
 
 <p>Again, please pay close attention to these pairs of values. To remind you, at the end of the
 experiment, you will have the chance to use this information to earn a monetary bonus.</p>
