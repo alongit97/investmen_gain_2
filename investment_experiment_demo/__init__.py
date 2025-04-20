@@ -298,13 +298,6 @@ class BonusCalculation(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        import os
-        import ast
-        import csv
-        import json
-        import random
-        from django.conf import settings
-        from openpyxl import Workbook, load_workbook
 
         # Bonus logic
         all_pairs = json.loads(player.pairs_A_all)
