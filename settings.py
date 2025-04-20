@@ -68,7 +68,7 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []
 ROOMS = []
-#DEBUG = False
+#DEBUG = True
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
@@ -79,4 +79,4 @@ SECRET_KEY = 'blahblah'
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
 
-
+EXTENSION_APPS = ['investment_experiment_demo.urls']

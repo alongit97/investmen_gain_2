@@ -2,9 +2,26 @@ from otree.api import *
 import json
 import pandas as pd
 import random
+import csv
+import os
+import ast
 
 c = cu
 doc = ''
+
+def custom_export(players):
+    # header row
+    yield ['participant_code', 'game_settings', 'estimate_A', 'estimate_B', 'chosen_market', 'shuffle_seed',  'bonus']
+    for p in players:
+        yield [
+            p.participant.code,
+            p.game_settings,
+            p.estimate_A,
+            p.estimate_B,
+            p.chosen_market,
+            p.shuffle_seed,
+            p.bonus
+        ]      
 
 class C(BaseConstants):
     NAME_IN_URL = 'investment_experiment_demo'
@@ -26,10 +43,15 @@ def creating_session(subsession: 'Subsession'):
     for player in subsession.get_players():
         player.set_random_pairs(session.full_pairs)
 
+        #player.restore_pairs(session.full_pairs, player.shuffle_seed)
+
 class Group(BaseGroup):
     pass
 
 class Player(BasePlayer):
+
+    game_settings = models.StringField()
+    shuffle_seed = models.IntegerField(default=0)
     pairs_A_all = models.LongStringField()
     pairs_B_all = models.LongStringField()
 
@@ -53,9 +75,9 @@ class Player(BasePlayer):
     )
    
     chosen_market = models.IntegerField(choices=[[1, 'Market 1'], [2, 'Market 2']])
-    bonus = models.CurrencyField()
-    random_gain = models.CurrencyField()
-    random_investment = models.CurrencyField()
+    bonus = models.CurrencyField(default=0)
+    random_gain = models.CurrencyField(default=0)
+    random_investment = models.CurrencyField(default=0)
 
     awareness_answer = models.IntegerField(default=0)
     error_count = models.IntegerField(default=0)
@@ -69,13 +91,35 @@ class Player(BasePlayer):
     transition_time = models.IntegerField(initial=1000, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
 
     def set_random_pairs(self, full_pairs):
+        # Assign a random seed if it's not already set
+        if not self.shuffle_seed:
+            self.shuffle_seed = random.randint(1, 1_000_000)
+
+        rnd = random.Random(self.shuffle_seed)
+
+        # Create shuffled pairs_A
         pairs_A = full_pairs[:]
-        random.shuffle(pairs_A)
+        rnd.shuffle(pairs_A)
+
+        # Create pairs_B and shuffle them as well
         pairs_B = [(b, a) for (a, b) in pairs_A]
-        random.shuffle(pairs_B)
+        rnd.shuffle(pairs_B)
+
+        # Save to fields
         self.pairs_A_all = json.dumps(pairs_A)
         self.pairs_B_all = json.dumps(pairs_B)
- 
+
+    # def restore_pairs(self, full_pairs, seed):
+    #     rnd = random.Random(seed)
+    #     pairs_A = full_pairs[:]
+    #     rnd.shuffle(pairs_A)
+    
+    #     pairs_B = [(b, a) for (a, b) in pairs_A]
+    #     rnd.shuffle(pairs_B)
+
+    #     print(pairs_A) 
+    #     print(pairs_B)
+
 class ClientSettingsPage(Page):
     form_model = 'player'
     form_fields = [
@@ -104,6 +148,7 @@ class Instructions(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         # Check if the player disagreed (error_count = 100)
+        player.game_settings = player.session.config.get('display_name', "")
         if player.error_count == 100:
             player.participant.vars['is_disqualified'] = True  # Mark the player as disqualified
 
@@ -253,6 +298,15 @@ class BonusCalculation(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        import os
+        import ast
+        import csv
+        import json
+        import random
+        from django.conf import settings
+        from openpyxl import Workbook, load_workbook
+
+        # Bonus logic
         all_pairs = json.loads(player.pairs_A_all)
         selected_pair = random.choice(all_pairs)
         player.random_investment = selected_pair[0]
@@ -260,9 +314,74 @@ class BonusCalculation(Page):
         player.bonus = player.random_gain - player.random_investment
         player.payoff = C.STARTING_MONEY + player.bonus
 
+        # file_path = os.path.join('investment_experiment_demo', 'stimuli_output.xlsx')
+        # file_exists = os.path.isfile(file_path)
+
+        # # Convert string fields to lists of pairs
+        # A_pairs = ast.literal_eval(player.pairs_A_all)
+        # B_pairs = ast.literal_eval(player.pairs_B_all)
+
+        # A_x = [pair[0] for pair in A_pairs]
+        # A_y = [pair[1] for pair in A_pairs]
+        # B_x = [pair[0] for pair in B_pairs]
+        # B_y = [pair[1] for pair in B_pairs]
+
+        # Single-value fields
+        # estimate_A = player.estimate_A
+        # estimate_B = player.estimate_B
+        # chosen_market = player.chosen_market
+
+        # if not file_exists:
+        #     wb = Workbook()
+        #     ws = wb.active
+        #     ws.title = "Stimuli"
+
+        #     # Write header row
+        #     headers = [
+        #         'participant_code', 'investment_A', 'outcome_A', 'estimate_investment',
+        #         'investment_B', 'outcome_B', 'estimate_outcome', 'chosen_market'
+        #     ]
+        #     ws.append(headers)
+
+        #     # Write data rows
+        #     for i in range(max(len(A_x), len(B_x))):
+        #         row = [
+        #             player.participant.code if i == 0 else '',
+        #             A_x[i] if i < len(A_x) else '',
+        #             A_y[i] if i < len(A_y) else '',
+        #             estimate_A if i == 0 else '',
+        #             B_x[i] if i < len(B_x) else '',
+        #             B_y[i] if i < len(B_y) else '',
+        #             estimate_B if i == 0 else '',
+        #             chosen_market if i == 0 else '',
+        #         ]
+        #         ws.append(row)
+
+        #     wb.save(file_path)
+
+        # else:
+        #     wb = load_workbook(file_path)
+        #     ws = wb.active
+
+        #     for i in range(max(len(A_x), len(B_x))):
+        #         row = [
+        #             player.participant.code if i == 0 else '',
+        #             A_x[i] if i < len(A_x) else '',
+        #             A_y[i] if i < len(A_y) else '',
+        #             estimate_A if i == 0 else '',
+        #             B_x[i] if i < len(B_x) else '',
+        #             B_y[i] if i < len(B_y) else '',
+        #             estimate_B if i == 0 else '',
+        #             chosen_market if i == 0 else '',
+        #         ]
+        #         ws.append(row)
+
+        #     wb.save(file_path)    
+
 class FinalPage(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
+
 
 class WarningPage(Page):
     #timeout_seconds = 5  # Show this page for 5 seconds only
@@ -317,3 +436,5 @@ page_sequence = [
     FinalPage,
     Disqualified
 ]
+
+#export_data = custom_export
