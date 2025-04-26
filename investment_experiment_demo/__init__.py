@@ -219,15 +219,15 @@ class AttentionCheck2(Page):
     @staticmethod
     def vars_for_template(player: Player):
         pairs_A = player.participant.vars.get('current_pairs_A', [])
-        final_investment = pairs_A[-1][0] if pairs_A else None
+        correct_answer = 1 if pairs_A[-1][0] > pairs_A[-1][1] else 2 if pairs_A[-1][0] == pairs_A[-1][1] else 3
         # Store the correct answer in a single variable for the last attention check
-        player.participant.vars['correct_answer_last_attention_check'] = final_investment
-        return {'final_investment': final_investment}
+        player.participant.vars['correct_answer_last_attention_check'] = correct_answer
+        return {'correct_answer': correct_answer}
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         pairs_A = player.participant.vars.get('current_pairs_A', [])
-        correct_answer = pairs_A[-1][0] if pairs_A else None
+        correct_answer = final_investment = 1 if pairs_A[-1][0] > pairs_A[-1][1] else 2 if pairs_A[-1][0] == pairs_A[-1][1] else 3
         if player.awareness_answer != correct_answer:
             player.error_count += 1
         if player.error_count > 1:
@@ -266,15 +266,15 @@ class AttentionCheck3(Page):
     @staticmethod
     def vars_for_template(player: Player):
         pairs_B = player.participant.vars.get('current_pairs_B', [])
-        final_gain = pairs_B[-1][0] if pairs_B else None
+        correct_answer = 1 if pairs_B[-1][0] > pairs_B[-1][1] else 2 if pairs_B[-1][0] == pairs_B[-1][1] else 3
         # Store the correct answer in the same variable for the last attention check
-        player.participant.vars['correct_answer_last_attention_check'] = final_gain
-        return {'final_gain': final_gain}
+        player.participant.vars['correct_answer_last_attention_check'] = correct_answer
+        return {'correct_answer': correct_answer}
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         pairs_B = player.participant.vars.get('current_pairs_B', [])
-        correct_answer = pairs_B[-1][0] if pairs_B else None
+        correct_answer = 1 if pairs_B[-1][0] > pairs_B[-1][1] else 2 if pairs_B[-1][0] == pairs_B[-1][1] else 3
         if player.awareness_answer != correct_answer:
             player.error_count += 1
         if player.error_count > 1:
@@ -307,69 +307,6 @@ class BonusCalculation(Page):
         player.bonus = player.random_gain - player.random_investment
         player.payoff = C.STARTING_MONEY + player.bonus
 
-        # file_path = os.path.join('investment_experiment_demo', 'stimuli_output.xlsx')
-        # file_exists = os.path.isfile(file_path)
-
-        # # Convert string fields to lists of pairs
-        # A_pairs = ast.literal_eval(player.pairs_A_all)
-        # B_pairs = ast.literal_eval(player.pairs_B_all)
-
-        # A_x = [pair[0] for pair in A_pairs]
-        # A_y = [pair[1] for pair in A_pairs]
-        # B_x = [pair[0] for pair in B_pairs]
-        # B_y = [pair[1] for pair in B_pairs]
-
-        # Single-value fields
-        # estimate_A = player.estimate_A
-        # estimate_B = player.estimate_B
-        # chosen_market = player.chosen_market
-
-        # if not file_exists:
-        #     wb = Workbook()
-        #     ws = wb.active
-        #     ws.title = "Stimuli"
-
-        #     # Write header row
-        #     headers = [
-        #         'participant_code', 'investment_A', 'outcome_A', 'estimate_investment',
-        #         'investment_B', 'outcome_B', 'estimate_outcome', 'chosen_market'
-        #     ]
-        #     ws.append(headers)
-
-        #     # Write data rows
-        #     for i in range(max(len(A_x), len(B_x))):
-        #         row = [
-        #             player.participant.code if i == 0 else '',
-        #             A_x[i] if i < len(A_x) else '',
-        #             A_y[i] if i < len(A_y) else '',
-        #             estimate_A if i == 0 else '',
-        #             B_x[i] if i < len(B_x) else '',
-        #             B_y[i] if i < len(B_y) else '',
-        #             estimate_B if i == 0 else '',
-        #             chosen_market if i == 0 else '',
-        #         ]
-        #         ws.append(row)
-
-        #     wb.save(file_path)
-
-        # else:
-        #     wb = load_workbook(file_path)
-        #     ws = wb.active
-
-        #     for i in range(max(len(A_x), len(B_x))):
-        #         row = [
-        #             player.participant.code if i == 0 else '',
-        #             A_x[i] if i < len(A_x) else '',
-        #             A_y[i] if i < len(A_y) else '',
-        #             estimate_A if i == 0 else '',
-        #             B_x[i] if i < len(B_x) else '',
-        #             B_y[i] if i < len(B_y) else '',
-        #             estimate_B if i == 0 else '',
-        #             chosen_market if i == 0 else '',
-        #         ]
-        #         ws.append(row)
-
-        #     wb.save(file_path)    
 
 class FinalPage(Page):
     def is_displayed(player: Player):

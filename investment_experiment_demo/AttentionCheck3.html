@@ -3,21 +3,24 @@
 {% block title %}Attention Check{% endblock %}
 
 {% block content %}
-    <p style="font-size: 22px; color: black;">
-        {% if session.config.investment_before_outcome %}
-            What was the  <span style="color: blue;">outcome</span> that appeared on the card just presented?
-        {% else %}
-            What was the  <span style="color: blue;">investment</span> that appeared on the card just presented?
-        {% endif %}
-    </p>
+<p style="font-size: 22px; color: black;">
+    Which of the following is true of the last card presented?
+</p>
 
-    <form method="post">
-        <input name="awareness_answer" type="number" required>
-        <button class="btn btn-primary" type="submit">Submit</button>
-    </form>
+<form method="post">
 
-    {% if player.error_count > 1 %}
-        <p style="color: red;">You have answered incorrectly too many times. You will be redirected.</p>
+    {% if session.config.investment_before_outcome %}
+    <label><input type="radio" name="awareness_answer" value="1"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>larger</b> than the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="2"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>equal</b> to the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="3"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>smaller</b> than the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
+    {% else %}
+    <label><input type="radio" name="awareness_answer" value="1"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>larger</b> than the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="2"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>equal</b> to the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="3"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>smaller</b> than the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>
     {% endif %}
+
+    <br>
+    <button class="btn btn-primary">Next</button>
+</form>
 
 {% endblock %}
