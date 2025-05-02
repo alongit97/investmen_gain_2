@@ -14,21 +14,21 @@
                     <span class="transition-text">Showing next case...</span>
                 </div>
 
-                <!-- Investment Card -->
+                <!-- first card -->
                 <div class="investment" id="investment_{{ forloop.counter0 }}">
                     <span class="investment-text">
                         {% if session.config.investment_before_outcome %}
-                            Individual received outcome <span class="investment-amount">{{ pair.0 }}</span>
+                            Individual received outcome <span class="investment-amount">{{ pair.1 }}</span>
                         {% else %}
                             Individual invested <span class="investment-amount">{{ pair.0 }}</span>
                         {% endif %}
                     </span>
                 </div>
 
-                <!-- Profit Card -->
+                <!-- second card-->
                 <div class="profit" id="profit_{{ forloop.counter0 }}">
                     {% if session.config.investment_before_outcome %}
-                    <span class="profit-text">after having made an investment <span class="profit-amount">{{ pair.1 }}</span></span>
+                    <span class="profit-text">after having made an investment <span class="profit-amount">{{ pair.0 }}</span></span>
                     {% else %}
                         <span class="profit-text">They received outcome <span class="profit-amount">{{ pair.1 }}</span></span>
                     {% endif %}
@@ -143,7 +143,7 @@
 let autoAdvanceTimer = null;
 let currentPairIndex = 0;
 const totalPairs = {{ player.num_pairs }};
-const responseTime = {{ player.response_time }};
+//const responseTime =  player.response_time }};
 const transitionTime = {{ player.transition_time }};
 const firstCardTime = {{ player.first_card_time }};
 const secondCardTime = {{ player.second_card_time }};
@@ -191,14 +191,18 @@ function showPair(index) {
                         setTimeout(() => {
                             investment.style.display = "none";
                             profit.style.display = "none";
-                            nextBtnContainer.style.display = "block";
+                            handleNextPair();
 
+                            // --- Commented out: Show next button and start auto-advance ---
+                            /*
+                            nextBtnContainer.style.display = "block";
                             isPairVisible = true;
 
-                            //Start auto-advance timer
+                            // Start auto-advance timer
                             autoAdvanceTimer = setTimeout(() => {
                                 handleNextPair();
                             }, responseTime); // Directly call handleNextPair() when the timer runs out
+                            */
                         }, 500); // hide delay
                     }, secondCardTime); // profit visible duration
                 }, firstCardTime); // wait to show profit

@@ -17,7 +17,7 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
         'debug_mode': True,
-        'file_name': "Items_to_Present_Inv-Vee_3_1st-series_Out-then-Inv.xlsx",
+        'file_name': "Items_to_Present_Inv-Vee_3_1st-series_Out-then-Inv-new.xlsx",
         'investment_before_outcome': False,
     },
 
@@ -37,7 +37,7 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
         'debug_mode': True,
-        'file_name': "Items_to_Present_Uni_3_1st-series_Out-then-Inv.xlsx",
+        'file_name': "Items_to_Present_Uni_3_1st-series-out-then-inv-new.xlsx",
         'investment_before_outcome': False,
     },
 
@@ -57,7 +57,7 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
         'debug_mode': True,
-        'file_name': "Items_to_Present_Vee_3_1st-series-Out-then-Inv.xlsx",
+        'file_name': "Items_to_Present_Vee_3_1st-series-out-then-inv-new.xlsx",
         'investment_before_outcome': False,
     },
 ]

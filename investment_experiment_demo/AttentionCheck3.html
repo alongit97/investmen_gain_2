@@ -10,13 +10,14 @@
 <form method="post">
 
     {% if session.config.investment_before_outcome %}
-    <label><input type="radio" name="awareness_answer" value="1"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>larger</b> than the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="1"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>smaller</b> than the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>    
     <label><input type="radio" name="awareness_answer" value="2"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>equal</b> to the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
-    <label><input type="radio" name="awareness_answer" value="3"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>smaller</b> than the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="3"> The <span style="color: blue; font-weight: bold;">outcome</span> was <b>larger</b> than the <span style="color: #b38b00; font-weight: bold;">investment</span></label><br>
     {% else %}
-    <label><input type="radio" name="awareness_answer" value="1"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>larger</b> than the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="1"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>larger</b> than the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>    
     <label><input type="radio" name="awareness_answer" value="2"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>equal</b> to the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>
-    <label><input type="radio" name="awareness_answer" value="3"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>smaller</b> than the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>
+    <label><input type="radio" name="awareness_answer" value="3"> The <span style="color: blue; font-weight: bold;">investment</span> was <b>smaller</b> than the <span style="color: #b38b00; font-weight: bold;">outcome</span></label><br>    
+
     {% endif %}
 
     <br>

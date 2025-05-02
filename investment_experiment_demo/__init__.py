@@ -84,8 +84,8 @@ class Player(BasePlayer):
     attention1_q1 = models.StringField(default="" ,label="What is the sum of one and three? (write down your answer in letters)")
     attention1_q2 = models.StringField(default="" ,label="What word would you get if you combine the first and last letters of the sentence 'Anyone can do that'.")
 
-    num_pairs = models.IntegerField(initial=4, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
-    response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 1000)
+    num_pairs = models.IntegerField(initial=1, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
+    #response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 0)
     first_card_time = models.IntegerField(initial=1500, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
     second_card_time = models.IntegerField(initial=2500, verbose_name="Time for both cards to apear together(in milliseconds)", min = 1)
     transition_time = models.IntegerField(initial=1000, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
@@ -102,7 +102,8 @@ class Player(BasePlayer):
         rnd.shuffle(pairs_A)
 
         # Create pairs_B and shuffle them as well
-        pairs_B = [(b, a) for (a, b) in pairs_A]
+        #pairs_B = [(b, a) for (a, b) in pairs_A]
+        pairs_B = pairs_A
         rnd.shuffle(pairs_B)
 
         # Save to fields
@@ -124,7 +125,7 @@ class ClientSettingsPage(Page):
     form_model = 'player'
     form_fields = [
         'num_pairs',
-        'response_time',
+        #'response_time',
         'first_card_time',
         'second_card_time',
         'transition_time'
@@ -134,7 +135,7 @@ class ClientSettingsPage(Page):
     def vars_for_template(player: Player):
         return {
             'current_num_pairs': player.num_pairs,
-            'current_response_time': player.response_time,
+            #'current_response_time': player.response_time,
             'current_first_card_time': player.first_card_time,
             'current_second_card_time': player.second_card_time,
             'current_transition_time': player.transition_time
@@ -342,7 +343,7 @@ class Disqualified(Page):
 page_sequence = [
     ClientSettingsPage,
     Instructions,
-    AttentionCheck1,
+    #AttentionCheck1,
     BeforePartA,
     ShowInvestment,
     AttentionCheck2,

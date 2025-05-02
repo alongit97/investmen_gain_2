@@ -10,19 +10,34 @@
 </p>
 <p>
     Imagine yourself in the same scenario receiving an outcome after making an investment.  You   
-    try to predict whether the situation is likely to result in a gain or a loss <u>for you</u>. 
+    try to pyellowict whether the situation is likely to result in a gain or a loss <u>for you</u>. 
 </p>
 <p>Which of the following best describes your belief?</p>
 
 <form method="post">
     {{ formfield_errors 'estimate_B' }}
 
-    <label><input type="radio" name="estimate_B" value="1"> Your <strong>outcome</strong> would be <strong>much greater than</strong> the investment you made? <strong>(a lare gain)</strong></label><br>
-    <label><input type="radio" name="estimate_B" value="2"> Your <strong>outcome</strong> would be <strong>greater than</strong> the investment you made?<strong>(a small gain)</strong></label></label><br>
-    <label><input type="radio" name="estimate_B" value="3"> Your <strong>outcome</strong> would be <strong>equal to</strong> the investment you made?</label><br>
-    <label><input type="radio" name="estimate_B" value="4"> Your <strong>outcome</strong> would be <strong>less than</strong> the investment you made?</label><strong>(a small loss)</strong></label><br>
-    <label><input type="radio" name="estimate_B" value="5"> Your <strong>outcome</strong> would be <strong>much less than</strong> the investment you made? <strong>(a large loss)</strong></label><br>
+    <style>
+        .blue-bold { color: blue; font-weight: bold; }
+        .yellow-bold { color: #cbb406; font-weight: bold; }
+    </style>
+
+    {% if session.config.investment_before_outcome %}
+    <label><input type="radio" name="estimate_B" value="1"> <strong>A large gain -- </strong>The <span class="blue-bold">outcome</span> would be <strong>much greater than</strong> the <span class="yellow-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="2"> <strong>A small gain -- </strong>The <span class="blue-bold">outcome</span> would be <strong>greater than</strong> the <span class="yellow-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="3"> <strong>Neither gain nor loss -- </strong>The <span class="blue-bold">outcome</span> would be <strong>equal to</strong> the <span class="yellow-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="4"> <strong>A small loss -- </strong>The <span class="blue-bold">outcome</span> would be <strong>less than</strong> the <span class="yellow-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_B" value="5"> <strong>A large loss -- </strong>The <span class="blue-bold">outcome</span> would be <strong>much less than</strong> the <span class="yellow-bold">investment</span> you made?</label><br>
+
+    {% else %}
+    <label><input type="radio" name="estimate_B" value="1"> <strong>A large loss -- </strong>The <span class="blue-bold">investment</span> would be <strong>much less than</strong> the <span class="yellow-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_B" value="2"> <strong>A small loss -- </strong>The <span class="blue-bold">investment</span> would be <strong>less than</strong> the <span class="yellow-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_B" value="3"> <strong>Neither gain nor loss -- </strong>The <span class="blue-bold">investment</span> would be <strong>equal to</strong> the <span class="yellow-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_B" value="4"> <strong>A small gain -- </strong>The <span class="blue-bold">investment</span> would be <strong>greater than</strong> the <span class="yellow-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_B" value="5"> <strong>A large gain -- </strong>The <span class="blue-bold">investment</span> would be <strong>much greater than</strong> the <span class="yellow-bold">outcome</span> you got?</label><br>
     
+    {% endif %}   
+
     <br>
     <button class="btn btn-primary">Next</button>
 </form>

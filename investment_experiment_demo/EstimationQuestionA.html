@@ -17,11 +17,24 @@
 <form method="post">
     {{ formfield_errors 'estimate_A' }}
 
-    <label><input type="radio" name="estimate_A" value="1"> Your <strong>investment</strong> would be <strong>much greater than</strong> the outcome you obtained? <strong>(a large loss)</strong></label><br>
-    <label><input type="radio" name="estimate_A" value="2"> Your <strong>investment</strong> would be <strong>greater than</strong> the outcome you obtained?<strong>(a small loss)</strong></label></label><br>
-    <label><input type="radio" name="estimate_A" value="3"> Your <strong>investment</strong> would be <strong>equal to</strong> the outcome you obtained?</label><br>
-    <label><input type="radio" name="estimate_A" value="4"> Your <strong>investment</strong> would be <strong>less than</strong> the outcome you obtained?<strong>(a small gain)</strong></label></label><br>
-    <label><input type="radio" name="estimate_A" value="5"> Your <strong>investment</strong> would be <strong>much less than</strong> the outcome you obtained? <strong>(large gain)</strong></label><br>
+    <style>
+        .red-bold { color: red; font-weight: bold; }
+        .green-bold { color: green; font-weight: bold; }
+    </style>
+
+    {% if session.config.investment_before_outcome %}
+    <label><input type="radio" name="estimate_A" value="1"> <strong>A large loss -- </strong>The <span class="red-bold">investment</span> would be <strong>much less than</strong> the <span class="green-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_A" value="2"> <strong>A small loss -- </strong>The <span class="red-bold">investment</span> would be <strong>less than</strong> the <span class="green-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_A" value="3"> <strong>Neither gain nor loss -- </strong>The <span class="red-bold">investment</span> would be <strong>equal to</strong> the <span class="green-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_A" value="4"> <strong>A small gain -- </strong>The <span class="red-bold">investment</span> would be <strong>greater than</strong> the <span class="green-bold">outcome</span> you got?</label><br>
+    <label><input type="radio" name="estimate_A" value="5"> <strong>A large gain -- </strong>The <span class="red-bold">investment</span> would be <strong>much greater than</strong> the <span class="green-bold">outcome</span> you got?</label><br>
+    {% else %}
+    <label><input type="radio" name="estimate_A" value="1"> <strong>A large gain -- </strong>The <span class="red-bold">outcome</span> would be <strong>much greater than</strong> the <span class="green-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_A" value="2"> <strong>A small gain -- </strong>The <span class="red-bold">outcome</span> would be <strong>greater than</strong> the <span class="green-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_A" value="3"> <strong>Neither gain nor loss -- </strong>The <span class="red-bold">outcome</span> would be <strong>equal to</strong> the <span class="green-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_A" value="4"> <strong>A small loss -- </strong>The <span class="red-bold">outcome</span> would be <strong>less than</strong> the <span class="green-bold">investment</span> you made?</label><br>
+    <label><input type="radio" name="estimate_A" value="5"> <strong>A large loss -- </strong>The <span class="red-bold">outcome</span> would be <strong>much less than</strong> the <span class="green-bold">investment</span> you made?</label><br>
+    {% endif %} 
     
     <br>
     <button class="btn btn-primary">Next</button>
