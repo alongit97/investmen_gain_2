@@ -342,7 +342,6 @@ class Disqualified(Page):
 
 page_sequence = [
     #ClientSettingsPage,
-    ChooseSet,
     Instructions,
     AttentionCheck1,
     BeforePartA,
