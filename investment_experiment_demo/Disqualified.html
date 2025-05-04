@@ -7,10 +7,13 @@
         <p style="font-size: 22px; color: red;">
             You have been disqualified from the experiment due to too many incorrect answers.
         </p>
+        <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=CTV25XYU" />
+
     {% elif player.error_count == 100 %}
         <p style="font-size: 22px; color: red;">
             You diceded not to agree to the terms and cancel your participation.
         </p>
+        <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=CGJUIL15" />
 
         <p style="font-size: 22px;"> thank you</p>
 
@@ -18,6 +21,7 @@
         <p style="font-size: 22px; color: red;">
             You have been disqualified from the experiment because you failed to answer the authentication questions.
         </p>
+        <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=C171G7ST" />
 
     {% else %}
         <p style="font-size: 22px; color: red;">
@@ -30,7 +34,7 @@
     {% endif %}
 
     <p style="font-size: 18px; color: black;">
-        You will be now redirected to prolific.
+        You will now  be redirected to prolific.
     </p>
-    <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=CTV25XYU" />
+    
 {% endblock %}

@@ -74,7 +74,7 @@ class Player(BasePlayer):
     ]
     )
    
-    chosen_market = models.IntegerField(choices=[[1, 'Market 1'], [2, 'Market 2']])
+    chosen_market = models.IntegerField(choices=[[1, 'Market 1'], [2, 'Market 2']], default = 0)
     bonus = models.CurrencyField(default=0)
     random_gain = models.CurrencyField(default=0)
     random_investment = models.CurrencyField(default=0)
@@ -86,7 +86,7 @@ class Player(BasePlayer):
 
     num_pairs = models.IntegerField(initial=12, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
     #response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 0)
-    first_card_time = models.IntegerField(initial=1500, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
+    first_card_time = models.IntegerField(initial=2000, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
     second_card_time = models.IntegerField(initial=2500, verbose_name="Time for both cards to apear together(in milliseconds)", min = 1)
     transition_time = models.IntegerField(initial=1000, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
 
@@ -121,7 +121,7 @@ class Player(BasePlayer):
     #     print(pairs_A) 
     #     print(pairs_B)
 
-class ClientSettingsPage(Page):
+"""class ClientSettingsPage(Page):
     form_model = 'player'
     form_fields = [
         'num_pairs',
@@ -140,7 +140,7 @@ class ClientSettingsPage(Page):
             'current_second_card_time': player.second_card_time,
             'current_transition_time': player.transition_time
         }
-
+"""
 
 class Instructions(Page):
     form_model = 'player'
@@ -341,7 +341,8 @@ class Disqualified(Page):
         return {'message': 'You have been disqualified from the experiment due to too many incorrect answers.'}
 
 page_sequence = [
-    ClientSettingsPage,
+    #ClientSettingsPage,
+    ChooseSet,
     Instructions,
     AttentionCheck1,
     BeforePartA,

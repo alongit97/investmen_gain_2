@@ -6,7 +6,6 @@ SESSION_CONFIGS = [
         'display_name': "IV, inv before out",
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
-        'debug_mode': True,
         'file_name': "Items_to_Present_Inv-Vee_3_1st-series_Inv-then-Out.xlsx",
         'investment_before_outcome': True,
     },
@@ -16,8 +15,7 @@ SESSION_CONFIGS = [
         'display_name': "IV, out before inv",
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
-        'debug_mode': True,
-        'file_name': "Items_to_Present_Inv-Vee_3_1st-series_Out-then-Inv-new.xlsx",
+        'file_name': "Items_to_Present_Inv-Vee_3_1st-series_out-then-inv-new.xlsx",
         'investment_before_outcome': False,
     },
 
@@ -26,7 +24,6 @@ SESSION_CONFIGS = [
         'display_name': "U, inv before out",
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
-        'debug_mode': True,
         'file_name': "Items_to_Present_Uni_3_1st-series-Inv-then-Out.xlsx",
         'investment_before_outcome': True,
     },
@@ -36,7 +33,6 @@ SESSION_CONFIGS = [
         'display_name': "U, out before inv",
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
-        'debug_mode': True,
         'file_name': "Items_to_Present_Uni_3_1st-series-out-then-inv-new.xlsx",
         'investment_before_outcome': False,
     },
@@ -46,7 +42,6 @@ SESSION_CONFIGS = [
         'display_name': "V, inv before out",
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
-        'debug_mode': True,
         'file_name': "Items_to_Present_Vee_3_1st-series-Inv-then-Out.xlsx",
         'investment_before_outcome': True,
     },
@@ -56,7 +51,6 @@ SESSION_CONFIGS = [
         'display_name': "V, out before inv",
         'num_demo_participants': 1,
         'app_sequence': ['investment_experiment_demo'],
-        'debug_mode': True,
         'file_name': "Items_to_Present_Vee_3_1st-series-out-then-inv-new.xlsx",
         'investment_before_outcome': False,
     },
@@ -68,7 +62,7 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []
 ROOMS = []
-#DEBUG = True
+DEBUG = False
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
