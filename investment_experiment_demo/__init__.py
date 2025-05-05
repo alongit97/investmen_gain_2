@@ -103,8 +103,8 @@ class Player(BasePlayer):
 
         # Create pairs_B and shuffle them as well
         #pairs_B = [(b, a) for (a, b) in pairs_A]
-        pairs_B = pairs_A
-        rnd.shuffle(pairs_B)
+        pairs_B = rnd.shuffle(pairs_A)
+        #rnd.shuffle(pairs_B)
 
         # Save to fields
         self.pairs_A_all = json.dumps(pairs_A)
@@ -121,7 +121,7 @@ class Player(BasePlayer):
     #     print(pairs_A) 
     #     print(pairs_B)
 
-"""class ClientSettingsPage(Page):
+class ClientSettingsPage(Page):
     form_model = 'player'
     form_fields = [
         'num_pairs',
@@ -140,7 +140,7 @@ class Player(BasePlayer):
             'current_second_card_time': player.second_card_time,
             'current_transition_time': player.transition_time
         }
-"""
+
 
 class Instructions(Page):
     form_model = 'player'
@@ -341,7 +341,7 @@ class Disqualified(Page):
         return {'message': 'You have been disqualified from the experiment due to too many incorrect answers.'}
 
 page_sequence = [
-    #ClientSettingsPage,
+    ClientSettingsPage,
     Instructions,
     AttentionCheck1,
     BeforePartA,
