@@ -11,7 +11,7 @@ doc = ''
 
 def custom_export(players):
     # header row
-    yield ['participant_code', 'game_settings', 'estimate_A', 'estimate_B', 'chosen_market', 'shuffle_seed',  'bonus']
+    yield ['participant_code', 'game_settings', 'estimate_A', 'estimate_B', 'chosen_market', 'shuffle_seed_A', 'shuffle_seed_B',  'bonus']
     for p in players:
         yield [
             p.participant.code,
@@ -19,7 +19,8 @@ def custom_export(players):
             p.estimate_A,
             p.estimate_B,
             p.chosen_market,
-            p.shuffle_seed,
+            p.shuffle_seed_A,
+            p.shuffle_seed_B,
             p.bonus
         ]      
 
@@ -51,7 +52,8 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     game_settings = models.StringField()
-    shuffle_seed = models.IntegerField(default=0)
+    shuffle_seed_A = models.IntegerField(default=0)
+    shuffle_seed_B = models.IntegerField(default=0)
     pairs_A_all = models.LongStringField()
     pairs_B_all = models.LongStringField()
 
@@ -88,23 +90,24 @@ class Player(BasePlayer):
     #response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 0)
     first_card_time = models.IntegerField(initial=2000, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
     second_card_time = models.IntegerField(initial=2500, verbose_name="Time for both cards to apear together(in milliseconds)", min = 1)
-    transition_time = models.IntegerField(initial=1000, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
+    transition_time = models.IntegerField(initial=1, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
 
     def set_random_pairs(self, full_pairs):
         # Assign a random seed if it's not already set
-        if not self.shuffle_seed:
-            self.shuffle_seed = random.randint(1, 1_000_000)
+        self.shuffle_seed_A = random.randint(1, 1_000_000)
+        self.shuffle_seed_B = random.randint(1, 1_000_000)
 
-        rnd = random.Random(self.shuffle_seed)
+        rnd_A = random.Random(self.shuffle_seed_A)
+        rnd_B = random.Random(self.shuffle_seed_B)
 
         # Create shuffled pairs_A
         pairs_A = full_pairs[:]
-        rnd.shuffle(pairs_A)
-
+        rnd_A.shuffle(pairs_A)
+        
+        pairs_B = full_pairs[:]
+        rnd_B.shuffle(pairs_B)
         # Create pairs_B and shuffle them as well
         #pairs_B = [(b, a) for (a, b) in pairs_A]
-        pairs_B = rnd.shuffle(pairs_A)
-        #rnd.shuffle(pairs_B)
 
         # Save to fields
         self.pairs_A_all = json.dumps(pairs_A)
