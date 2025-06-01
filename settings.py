@@ -74,3 +74,15 @@ SECRET_KEY = 'blahblah'
 INSTALLED_APPS = ['otree']
 
 EXTENSION_APPS = ['investment_experiment_demo.urls']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'otree',
+        'USER': 'otreeuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
