@@ -1,9 +1,5 @@
 from os import environ
-import dj_database_url
 
-DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
-}
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fee=0)
 SESSION_CONFIGS = [
     {
