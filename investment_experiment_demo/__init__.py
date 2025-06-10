@@ -83,6 +83,7 @@ class Player(BasePlayer):
 
     awareness_answer = models.IntegerField(default=0)
     error_count = models.IntegerField(default=0)
+    status = models.StringField(default = "empty")
     attention1_q1 = models.StringField(default="" ,label="What is the sum of one and three? (write down your answer in letters)")
     attention1_q2 = models.StringField(default="" ,label="What word would you get if you combine the first and last letters of the sentence 'Anyone can do that'.")
 
@@ -147,14 +148,19 @@ class ClientSettingsPage(Page):
 
 class Instructions(Page):
     form_model = 'player'
-    form_fields = ['error_count']  # Use the existing 'error_count' field to capture agree/disagree
+    form_fields = ['error_count']
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        # Check if the player disagreed (error_count = 100)
+        # Set game_settings from session config
         player.game_settings = player.session.config.get('display_name', "")
+
+        # Set disqualification flag
         if player.error_count == 100:
-            player.participant.vars['is_disqualified'] = True  # Mark the player as disqualified
+            player.participant.vars['is_disqualified'] = True
+            player.status = 'disagreed'
+        elif player.error_count == 0:
+            player.status = 'in progress'
 
 class AttentionCheck1(Page):
     form_model = 'player'
@@ -187,6 +193,11 @@ class AttentionCheck1(Page):
     @staticmethod
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if player.error_count == 200:
+            player.status = 'failed authentication'
 
 class BeforePartA(Page):
     def is_displayed(player: Player):
@@ -236,6 +247,7 @@ class AttentionCheck2(Page):
             player.error_count += 1
         if player.error_count > 1:
             player.participant.vars['is_disqualified'] = True
+            player.status = "wrong answers"
 
 class EstimationQuestionA(Page):
     form_model = 'player'
@@ -283,6 +295,7 @@ class AttentionCheck3(Page):
             player.error_count += 1
         if player.error_count > 1:
             player.participant.vars['is_disqualified'] = True
+            player.status = "wrong answers"
 
 class EstimationQuestionB(Page):
     form_model = 'player'
