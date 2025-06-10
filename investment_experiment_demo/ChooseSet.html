@@ -14,11 +14,29 @@
 <body>
     <p>You have observed two different sets of investment/outcome cases, which we will refer to as two separate "markets":</p>
 
-    <p><span class="highlight">Market 1:</span> In this market you reviewed 36 cases, where each case described an individual making
-     an investment of a specific amount and the outcome they received following that investment.</p>
+{% if session.config.investment_before_outcome %}
+    <p><span class="highlight">Market 1:</span> In this market you reviewed 36 cases, where each case described an
+        individual making an investment of a specific amount and the outcome they received
+        following that investment.
+    </p>
 
-    <p><span class="highlight">Market 2:</span> In this market you reviewed 36 cases, 
-    where each case described an individual receiving an outcome of a specific amount and the investment they made prior to receiving that outcome.</p>
+    <p><span class="highlight">Market 2:</span> In this market you reviewed 36 cases, where each case described an
+        individual receiving an outcome of a specific amount and the investment they made
+        prior to receiving that outcome.
+    </p>
+
+{% else %}
+    <p><span class="highlight">Market 1:</span> In this market you reviewed 36 cases, where each case described an
+        individual receiving an outcome of a specific amount and the investment they made
+        prior to receiving that outcome.
+    </p>
+    
+    <p><span class="highlight">Market 2:</span> In this market you reviewed 36 cases, where each case described an
+        individual making an investment of a specific amount and the outcome they received
+        following that investment.
+    </p>
+     
+{% endif %} 
 
     <p>Now, you have an opportunity to earn a bonus. We start by giving you 50 extra points.</p>
 

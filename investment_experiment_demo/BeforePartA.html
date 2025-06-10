@@ -5,22 +5,30 @@
 
 
 {% if session.config.investment_before_outcome %}
-    <p>In the next section, you will review 36 cases, each describing an individual
-    who made an investment of a certain amount and received a specific amount as an outcome. Each case follows this format:</p>
+    <p>
+        In the next section, you will review 36 cases, each describing an individual who
+        made an investment of a certain amount of money and received a specific amount
+        as an outcome. Each case follows this format:
+    </p>
 
     <p style="color: red;"><strong>Individual invested X.</strong></p>
     <p style="color: green;"><strong>They received outcome Y.</strong></p>
 
 {% else %}
-    <p>In the next section, you will review 36 cases, each describing an individual
-    who received a specific amount as an outcome after making an investment of a certain amount and . Each case follows this format:</p>
+    <p>
+        In the next section, you will review 36 cases, each describing an individual who
+        received a specific amount of money as an outcome after making an investment of a
+        certain amount. Each case follows this format:
+    </p>
 
     <p style="color: red;"><strong>Individual received outcome X.</strong></p>
-    <p style="color: green;"><strong>after having made an investment Y.</strong></p>
+    <p style="color: green;"><strong>After having made an investment Y.</strong></p>
 {% endif %}        
 
-<p>Please pay close attention to these pairs of values. At the end of the experiment,
-    you will have the chance to use this information to earn a monetary bonus.</p>
+<p>
+    Please pay close attention to these pairs of values. At the end of the experiment,
+    you will have the chance to use this information to earn a monetary bonus.
+</p>
 
 <div class="text-center mt-4">
     <button class="btn btn-primary" type="submit">Continue</button>
