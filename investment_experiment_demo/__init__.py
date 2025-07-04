@@ -166,7 +166,7 @@ class Instructions(Page):
             player.participant.vars['is_disqualified'] = True
             player.status = 'disagreed'
 
-class AttentionCheck1(Page):
+class AuthenticationQuestion(Page):
     form_model = 'player'
     form_fields = ['attention1_q1', 'attention1_q2']
 
@@ -211,8 +211,8 @@ class BeforePartB(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)    
 
-class ShowInvestment(Page):
-    template_name = 'investment_experiment_demo/ShowInvestment.html'
+class ShowCardsA(Page):
+    template_name = 'investment_experiment_demo/ShowCardsA.html'
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
@@ -228,7 +228,7 @@ class ShowInvestment(Page):
     def before_next_page(player: Player, timeout_happened):
         player.participant.vars['show_investment_count'] = player.participant.vars.get('show_investment_count', 0) + 1
 
-class AttentionCheck2(Page):
+class AttentionCheckA(Page):
     form_model = 'player'
     form_fields = ['awareness_answer']
     
@@ -259,8 +259,8 @@ class EstimationQuestionA(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
-class ReverseShowProfit(Page):
-    template_name = 'investment_experiment_demo/ReverseShowProfit.html'
+class ShowCardsB(Page):
+    template_name = 'investment_experiment_demo/ShowCardsB.html'
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
@@ -361,26 +361,26 @@ class Disqualified(Page):
         return {'message': 'You have been disqualified from the experiment due to too many incorrect answers.'}
 
 page_sequence = [
-    #ClientSettingsPage,
+    ClientSettingsPage,
     Instructions,
-    AttentionCheck1,
+    AuthenticationQuestion,
     BeforePartA,
-    ShowInvestment,
-    AttentionCheck2,
+    ShowCardsA,
+    AttentionCheckA,
     WarningPage,
-    ShowInvestment,
-    AttentionCheck2,
+    ShowCardsA,
+    AttentionCheckA,
     WarningPage,
-    ShowInvestment,
+    ShowCardsA,
     EstimationQuestionA,
     BeforePartB,
-    ReverseShowProfit,
+    ShowCardsB,
     AttentionCheck3,
     WarningPage,
-    ReverseShowProfit,
+    ShowCardsB,
     AttentionCheck3,
     WarningPage,
-    ReverseShowProfit,
+    ShowCardsB,
     EstimationQuestionB,
     ChooseSet,
     BonusCalculation,
