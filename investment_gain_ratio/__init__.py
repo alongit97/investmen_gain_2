@@ -124,7 +124,7 @@ class Player(BasePlayer):
     attention1_q2 = models.StringField(default="" ,label="What word would you get if you combine the first and last letters of the sentence 'Anyone can do that'.")
 
     num_pairs = models.IntegerField(initial=12, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
-    card_time = models.IntegerField(initial=4000, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
+    card_time = models.IntegerField(initial=4000, verbose_name="Time for each card to be on screen(in milliseconds)", min = 1)
 
     def set_random_pairs(self, full_pairs_A, full_pairs_B):
         self.shuffle_seed_A = random.randint(1, 1_000_000)
