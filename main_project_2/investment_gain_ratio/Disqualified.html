@@ -1,0 +1,40 @@
+{% extends 'global/Page.html' %}
+
+{% block title %}Disqualified{% endblock %}
+
+{% block content %}
+    {% if player.error_count == 2 %}
+        <p style="font-size: 22px; color: red;">
+            You have been disqualified from the experiment due to too many incorrect answers.
+        </p>
+        <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=CXKJ7683" />
+
+    {% elif player.error_count == 100 %}
+        <p style="font-size: 22px; color: red;">
+            You diceded not to agree to the terms and cancel your participation.
+        </p>
+        <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=CX2DK6KG" />
+
+        <p style="font-size: 22px;"> thank you</p>
+
+    {% elif player.error_count == 200 %}
+        <p style="font-size: 22px; color: red;">
+            You have been disqualified from the experiment because you failed to answer the authentication questions.
+        </p>
+        <meta http-equiv="refresh" content="5; url=https://app.prolific.com/submissions/complete?cc=CTV25XYU" />
+
+    {% else %}
+        <p style="font-size: 22px; color: red;">
+            You have been disqualified from the experiment due to an unknown reason.
+        </p>
+
+        <p style="font-size: 18px; color: black;">
+            Please contact the experiment administrator for more details.
+        </p>
+    {% endif %}
+
+    <p style="font-size: 18px; color: black;">
+        You will now  be redirected to prolific.
+    </p>
+    
+{% endblock %}

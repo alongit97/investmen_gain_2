@@ -1,0 +1,124 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}{{ endblock }}
+
+{{ block content }}
+
+<!-- Wrapper -->
+<div id="cards-wrapper">
+    <div id="pairs-container">
+       {% for pair in pairs_B %}
+        <div class="pair" id="pair_{{ forloop.counter0 }}" style="display: none;">
+            <!-- transition-card, investment, profit: DELETE ALL -->
+
+            <!-- New single card -->
+            <div class="single-card">
+               This is a case in which a person bought Stock A for&nbsp;<strong>{{ pair.0 }}</strong>&nbsp;and obtained&nbsp;<strong>{{ pair.1 }}</strong>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Final oTree Next Button (initially hidden) 
+        <div id="final-next-button" style="display: none; text-align: center; margin-top: 20px;">
+            <button type="submit" class="next-button">Next</button>
+        </div>-->
+    </div>
+</div>
+
+<style>
+    .single-card {
+        width: 100%;
+        height: 100%;
+        padding: 30px;
+        border-radius: 10px;
+        background-color: #eef4ff;
+        border-left: 8px solid #3366cc;
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .single-card.show {
+        opacity: 1;
+        transform: scale(1);
+    }
+</style>
+
+<script>
+let autoAdvanceTimer = null;
+let currentPairIndex = 0;
+const totalPairs = {{ player.num_pairs }};
+//const responseTime =  player.response_time }};
+const secondCardTime = {{ player.card_time }};
+let isPairVisible = false;
+let isLoopPaused = false;
+let isAllPairsShown = false;
+//let test = "{{session.config.file_name}}";
+
+
+function showPair(index) {
+    const pair = document.getElementById("pair_" + index);
+    const card = pair.querySelector(".single-card");
+
+    pair.style.display = "block";
+    setTimeout(() => {
+        card.classList.add("show");
+
+        // Wait before showing next
+        setTimeout(() => {
+            card.classList.remove("show");
+
+            setTimeout(() => {
+                pair.style.display = "none";
+                handleNextPair();
+            }, 500); // Fade out delay
+
+        }, secondCardTime); // Show time per card
+    }, 50);
+}
+
+function handleNextPair() {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+
+    if (isLoopPaused) return;
+
+    document.getElementById("pair_" + currentPairIndex).style.display = "none";
+    currentPairIndex++;
+
+    if (currentPairIndex < totalPairs) {
+        isPairVisible = false;
+        showPair(currentPairIndex);
+    } else {
+        isAllPairsShown = true;
+        const form = document.querySelector('form'); // Assuming you have a form element
+        if (form) {
+        form.submit();  // This triggers the form submission and moves to the next page
+        }
+
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    showPair(currentPairIndex);
+});
+
+$(document).ready(function () {
+    $("form").submit(function (event) {
+        if (!isAllPairsShown) {
+            event.preventDefault();
+          return false;
+        }
+        return true;
+    });
+});
+
+
+</script>
+
+{{ endblock }}

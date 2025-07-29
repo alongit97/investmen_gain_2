@@ -1,0 +1,19 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}BonusCalculation{{ endblock }}
+
+{{ block content }}
+
+<title>{% block title %}{% endblock %}</title>
+
+<p style="font-size: 22px; color: black;">
+You chose Market {{player.chosen_market}}. We will now randomly choose one pair of investment and outcome from that market.
+</p>
+    
+<p style="font-size: 22px; color: black;">
+please continue to see your final bonus.
+</p>    
+{{ formfields }}
+
+{{ next_button }}
+
+{{ endblock }}

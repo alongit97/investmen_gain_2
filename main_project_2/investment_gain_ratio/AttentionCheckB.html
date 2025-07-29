@@ -1,0 +1,20 @@
+{% extends 'global/Page.html' %}
+
+{% block title %}Attention Check{% endblock %}
+
+{% block content %}
+    
+    <p style="font-size: 22px; color: black;">
+        Please indicate whether in the pair <u>just presented</u> the buying price was above 95, equal to 95, or below 95.
+    </p>
+
+    <form method="post">
+
+        <label><input type="radio" name="awareness_answer" value="1"> Above 95</label><br>
+        <label><input type="radio" name="awareness_answer" value="2"> Equal to 95</label><br>
+        <label><input type="radio" name="awareness_answer" value="3"> Below 95</label><br>
+
+        <br>
+        <button class="btn btn-primary">Next</button>
+    </form>
+{% endblock %}
