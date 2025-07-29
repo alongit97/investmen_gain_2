@@ -5,6 +5,7 @@ import random
 import csv
 import os
 import ast
+from docx import Document
 
 c = cu
 doc = ''
@@ -25,11 +26,11 @@ def custom_export(players):
         ]      
 
 class C(BaseConstants):
-    NAME_IN_URL = 'investment_experiment_demo'
+    NAME_IN_URL = 'investment_gain_ratio'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     NUM_PAIRS = 36
-    STARTING_MONEY = 50
+    STARTING_MONEY = 120
 
 class Subsession(BaseSubsession):
     pass
@@ -37,14 +38,45 @@ class Subsession(BaseSubsession):
 def creating_session(subsession: 'Subsession'):
     session = subsession.session
     file_path = session.config['file_name']
-    df = pd.read_excel(file_path, usecols="I,K", skiprows=1, nrows=36, header=None)
-    df.columns = ['Investment', 'Gain']
-    session.full_pairs = list(zip(df['Investment'], df['Gain']))
+    doc = Document(file_path)
+
+    tables = doc.tables
+    if not tables:
+        raise ValueError("The DOCX file contains no tables.")
+
+    # Use the first (and only) wide table
+    table = tables[0]
+
+    pairs_A = []
+    pairs_B = []
+
+    for row in table.rows[1:]:  # skip header row
+        cells = row.cells
+        if len(cells) < 5:
+            continue  # not enough data in this row
+
+        def safe_int(text):
+            text = text.strip()
+            return int(text) if text.isdigit() else None
+
+        a1 = safe_int(cells[0].text)
+        a2 = safe_int(cells[1].text)
+        b1 = safe_int(cells[3].text)
+        b2 = safe_int(cells[4].text)
+
+        if None not in (a1, a2, b1, b2):
+            pairs_A.append((a1, a2))
+            pairs_B.append((b1, b2))
+
+    if not pairs_A or not pairs_B:
+        raise ValueError("Failed to extract valid numeric pairs from the table.")
+
+    # Store full sets in the session object
+    session.full_pairs_A = pairs_A
+    session.full_pairs_B = pairs_B
 
     for player in subsession.get_players():
-        player.set_random_pairs(session.full_pairs)
-
-        #player.restore_pairs(session.full_pairs, player.shuffle_seed)
+        player.set_random_pairs(session.full_pairs_A, session.full_pairs_B)
 
 class Group(BaseGroup):
     pass
@@ -59,20 +91,24 @@ class Player(BasePlayer):
 
     estimate_A = models.IntegerField(
     choices=[
-        [1, "Very unlikely"],
-        [2, "Unlikely"],
-        [3, "Neutral"],
-        [4, "Likely"],
-        [5, "Very likely"]
+        [1, "large gain"],
+        [2, "medium gain"],
+        [3, "small gain"],
+        [4, "hardly a difference"],
+        [5, "small lose"],
+        [6, "medium lose"],
+        [7, "large lose"]
     ]
     )
     estimate_B = models.IntegerField(
     choices=[
-        [1, "Very unlikely"],
-        [2, "Unlikely"],
-        [3, "Neutral"],
-        [4, "Likely"],
-        [5, "Very likely"]
+        [1, "large gain"],
+        [2, "medium gain"],
+        [3, "small gain"],
+        [4, "hardly a difference"],
+        [5, "small lose"],
+        [6, "medium lose"],
+        [7, "large lose"]
     ]
     )
    
@@ -88,29 +124,21 @@ class Player(BasePlayer):
     attention1_q2 = models.StringField(default="" ,label="What word would you get if you combine the first and last letters of the sentence 'Anyone can do that'.")
 
     num_pairs = models.IntegerField(initial=12, verbose_name="Number of card pairs to show per set(between 1 and 12)", max = 12, min = 1)
-    #response_time = models.IntegerField(initial=5000, verbose_name="Time until next card apear by itself (in milliseconds)", max = 15000, min = 0)
-    first_card_time = models.IntegerField(initial=2000, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
-    second_card_time = models.IntegerField(initial=2500, verbose_name="Time for both cards to apear together(in milliseconds)", min = 1)
-    transition_time = models.IntegerField(initial=1, verbose_name="Time for gray card to apear (in milliseconds)", min = 1)
+    card_time = models.IntegerField(initial=4000, verbose_name="Time for first card to apear by itself(in milliseconds)", min = 1)
 
-    def set_random_pairs(self, full_pairs):
-        # Assign a random seed if it's not already set
+    def set_random_pairs(self, full_pairs_A, full_pairs_B):
         self.shuffle_seed_A = random.randint(1, 1_000_000)
         self.shuffle_seed_B = random.randint(1, 1_000_000)
 
         rnd_A = random.Random(self.shuffle_seed_A)
         rnd_B = random.Random(self.shuffle_seed_B)
 
-        # Create shuffled pairs_A
-        pairs_A = full_pairs[:]
+        pairs_A = full_pairs_A[:]
         rnd_A.shuffle(pairs_A)
-        
-        pairs_B = full_pairs[:]
-        rnd_B.shuffle(pairs_B)
-        # Create pairs_B and shuffle them as well
-        #pairs_B = [(b, a) for (a, b) in pairs_A]
 
-        # Save to fields
+        pairs_B = full_pairs_B[:]
+        rnd_B.shuffle(pairs_B)
+
         self.pairs_A_all = json.dumps(pairs_A)
         self.pairs_B_all = json.dumps(pairs_B)
 
@@ -129,20 +157,15 @@ class ClientSettingsPage(Page):
     form_model = 'player'
     form_fields = [
         'num_pairs',
-        #'response_time',
-        'first_card_time',
-        'second_card_time',
-        'transition_time'
+        'card_time',
     ]
 
     @staticmethod
     def vars_for_template(player: Player):
         return {
             'current_num_pairs': player.num_pairs,
-            #'current_response_time': player.response_time,
-            'current_first_card_time': player.first_card_time,
-            'current_second_card_time': player.second_card_time,
-            'current_transition_time': player.transition_time
+            'current_card_time': player.card_time,
+
         }
 
 
@@ -212,7 +235,7 @@ class BeforePartB(Page):
         return not player.participant.vars.get('is_disqualified', False)    
 
 class ShowCardsA(Page):
-    template_name = 'investment_experiment_demo/ShowCardsA.html'
+    template_name = 'investment_gain_ratio/ShowCardsA.html'
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
@@ -238,7 +261,7 @@ class AttentionCheckA(Page):
     @staticmethod
     def vars_for_template(player: Player):
         pairs_A = player.participant.vars.get('current_pairs_A', [])
-        correct_answer = 1 if pairs_A[-1][0] > pairs_A[-1][1] else 2 if pairs_A[-1][0] == pairs_A[-1][1] else 3
+        correct_answer = 1 if pairs_A[-1][0] > 95 else 2 if pairs_A[-1][0] == 95 else 3
         # Store the correct answer in a single variable for the last attention check
         player.participant.vars['correct_answer_last_attention_check'] = correct_answer
         return {'correct_answer': correct_answer}
@@ -246,7 +269,7 @@ class AttentionCheckA(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         pairs_A = player.participant.vars.get('current_pairs_A', [])
-        correct_answer = final_investment = 1 if pairs_A[-1][0] > pairs_A[-1][1] else 2 if pairs_A[-1][0] == pairs_A[-1][1] else 3
+        correct_answer = 1 if pairs_A[-1][0] > 95 else 2 if pairs_A[-1][0] == 95 else 3
         if player.awareness_answer != correct_answer:
             player.error_count += 1
         if player.error_count > 1:
@@ -260,7 +283,7 @@ class EstimationQuestionA(Page):
         return not player.participant.vars.get('is_disqualified', False)
 
 class ShowCardsB(Page):
-    template_name = 'investment_experiment_demo/ShowCardsB.html'
+    template_name = 'investment_gain_ratio/ShowCardsB.html'
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
@@ -276,7 +299,7 @@ class ShowCardsB(Page):
     def before_next_page(player: Player, timeout_happened):
         player.participant.vars['reverse_show_profit_count'] = player.participant.vars.get('reverse_show_profit_count', 0) + 1
 
-class AttentionCheck3(Page):
+class AttentionCheckB(Page):
     form_model = 'player'
     form_fields = ['awareness_answer']
     
@@ -286,7 +309,7 @@ class AttentionCheck3(Page):
     @staticmethod
     def vars_for_template(player: Player):
         pairs_B = player.participant.vars.get('current_pairs_B', [])
-        correct_answer = 1 if pairs_B[-1][0] > pairs_B[-1][1] else 2 if pairs_B[-1][0] == pairs_B[-1][1] else 3
+        correct_answer = 1 if pairs_B[-1][0] > 95 else 2 if pairs_B[-1][0] == 95 else 3
         # Store the correct answer in the same variable for the last attention check
         player.participant.vars['correct_answer_last_attention_check'] = correct_answer
         return {'correct_answer': correct_answer}
@@ -294,7 +317,7 @@ class AttentionCheck3(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         pairs_B = player.participant.vars.get('current_pairs_B', [])
-        correct_answer = 1 if pairs_B[-1][0] > pairs_B[-1][1] else 2 if pairs_B[-1][0] == pairs_B[-1][1] else 3
+        correct_answer = 1 if pairs_B[-1][0] > 95 else 2 if pairs_B[-1][0] == 95 else 3
         if player.awareness_answer != correct_answer:
             player.error_count += 1
         if player.error_count > 1:
@@ -321,7 +344,7 @@ class BonusCalculation(Page):
     def before_next_page(player: Player, timeout_happened):
 
         # Bonus logic
-        all_pairs = json.loads(player.pairs_A_all)
+        all_pairs = json.loads(player.pairs_A_all) if player.chosen_market == 1 else json.loads(player.pairs_B_all)
         selected_pair = random.choice(all_pairs)
         player.random_investment = selected_pair[0]
         player.random_gain = selected_pair[1]
@@ -361,9 +384,9 @@ class Disqualified(Page):
         return {'message': 'You have been disqualified from the experiment due to too many incorrect answers.'}
 
 page_sequence = [
-    #ClientSettingsPage,
-    Instructions,
+    ClientSettingsPage,
     AuthenticationQuestion,
+    Instructions,
     BeforePartA,
     ShowCardsA,
     AttentionCheckA,
@@ -375,10 +398,10 @@ page_sequence = [
     EstimationQuestionA,
     BeforePartB,
     ShowCardsB,
-    AttentionCheck3,
+    AttentionCheckB,
     WarningPage,
     ShowCardsB,
-    AttentionCheck3,
+    AttentionCheckB,
     WarningPage,
     ShowCardsB,
     EstimationQuestionB,
@@ -387,5 +410,3 @@ page_sequence = [
     FinalPage,
     Disqualified
 ]
-
-#export_data = custom_export
