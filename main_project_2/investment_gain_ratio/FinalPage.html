@@ -1,0 +1,22 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Final Results{{ endblock }}
+
+{{ block content }}
+
+<p style="font-size: 22px; color: black;">
+The investment chosen is {{player.random_investment}} and the outcome chosen is {{player.random_gain}} for a bonus of {{player.bonus}}
+</p>
+
+<p style="font-size: 22px; color: black;">
+This adds up for a total bonus of {{player.payoff}}.
+</p>
+
+<p style="font-size: 22px; color: black;">
+Thank you for participating.
+</p>
+
+<a href="https://app.prolific.com/submissions/complete?cc=C19W9JHT" class="btn btn-primary">
+    Click here to complete the study on Prolific
+</a>
+
+{{ endblock }}

@@ -1,0 +1,96 @@
+{% extends "global/Page.html" %}
+{% block content %}
+
+<h3>End of series</h3>
+<p>
+You have just observed 36 cases of individuals buying a stock for varying amounts and then selling them,
+receiving certain amounts. Before we move on to the next part of the experiment, we would like to assess
+your understanding of the situation.
+</p>
+
+<p>Note: You will be awarded a bonus whose size depends on the accuracy of your answer.</p>
+
+<p>
+Think about the ratio between what the person got after selling the stock (selling price) and what the person
+paid to buy the stock (buying price). That is, the ratio of selling / buying, and answer the following question:
+Overall, investment in Stock A resulted in
+</p>
+
+<form method="post">
+    {{ formfield_errors 'estimate_A' }}
+
+    <style>
+        .red-bold { color: red; font-weight: bold; }
+        .green-bold { color: green; font-weight: bold; }
+
+        table.choice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table.choice-table th, table.choice-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        table.choice-table td.radio-col {
+            text-align: center;
+            width: 50px;
+        }
+    </style>
+
+    <table class="choice-table">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Outcome</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="1"></td>
+                <td>A large gain</td>
+                <td>Selling price was higher than buying price, with the ratio of selling to buyingbeing more than 1.25</td>
+            </tr>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="2"></td>
+                <td>A medium gain</td>
+                <td>Selling price was higher than buying price, with the ratio of selling to buyingbeing more than 1.15 but less than 1.25</td>
+            </tr>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="3"></td>
+                <td>small gain</td>
+                <td>Selling price was higher than buying price, with the ratio of selling to buyingbeing more than 1.05 but less than 1.15</td>
+            </tr>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="4"></td>
+                <td>Hardly a difference</td>
+                <td>The ratio of selling price to buying price was between 0.95 and 1.05</td>
+            </tr>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="5"></td>
+                <td>A small loss</td>
+                <td>Selling price was lower than buying price, with the ratio of selling to buyingbeing less than 0.95 but more than 0.85</td>
+            </tr>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="6"></td>
+                <td>a medium loss</td>
+                <td>Selling price was lower than buying price, with the ratio of selling to buyingbeing less than 0.85 but more than 0.75</td>
+            </tr>
+            <tr>
+                <td class="radio-col"><input type="radio" name="estimate_A" value="7"></td>
+                <td>a large loss</td>
+                <td>Selling price was lower than buying price, with the ratio of selling to buyingbeing less than 0.75</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <button class="btn btn-primary">Next</button>
+</form>
+
+{% endblock %}

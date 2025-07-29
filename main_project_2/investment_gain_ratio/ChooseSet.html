@@ -1,0 +1,56 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Preferred set {{ endblock }}
+
+{{ block content }}
+
+<title>Market Selection</title>
+    <style>
+        .highlight {
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <p>You have observed two different sets of investment/outcome cases, which we will refer to as two separate "markets":</p>
+
+    <p>
+        <span class="highlight">Market 1:</span> In this market you reviewed 36 cases, where each case described an individual buying a
+        stock for a specific amount, and the amount obtained when that stock was sold. All cases involved buying
+        and selling of Stock A.
+    </p>
+
+    <p>
+        <span class="highlight">Market 2:</span> In this market you reviewed 36 cases, where each case described an individual buying a
+        stock for a specific amount, and the amount obtained when that stock was sold. All cases involved buying
+        and selling of Stock B.
+    </p>
+
+
+    <p>Now, you have an opportunity to earn a bonus. We start by giving you 120 extra points.</p>
+
+    <p>
+        We would like you to choose one of the two markets you were presented with during the experiment. Once
+        you choose a market, we will draw at random one card from that market. Your bonus would be the 120
+        points awarded to you, plus the difference between the selling and buying price specified on that card.
+    </p>
+
+    <p>
+        Please note that your final bonus may be higher or lower than the initial 120 points, depending on the
+        difference—but it will always be positive. Your bonus will be converted into cash at a rate of one penny per
+        point, and added to your payment for participation.
+    </p>
+
+    <h4>Which market do you prefer to invest in? (Market 1 or Market 2)</h4>
+
+    <form method="post">
+        {{ formfield_errors 'chosen_market' }}
+    
+        <label><input type="radio" name="chosen_market" value="1"> Market 1</label><br>
+        <label><input type="radio" name="chosen_market" value="2"> Market 2</label><br>
+    
+        <br>
+        <button class="btn btn-primary">Next</button>
+    </form>
+
+{{ endblock }}
