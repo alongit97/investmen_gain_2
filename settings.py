@@ -84,7 +84,7 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []
 ROOMS = []
-DEBUG = True
+DEBUG = False
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable

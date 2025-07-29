@@ -1,0 +1,69 @@
+{% extends 'global/Page.html' %}
+
+{% block title %}Experiment Instructions{% endblock %}
+
+{% block content %}
+
+<p>
+    This study examines how people combine information in their attempt to decide whether products are
+    profitable or not. You will be shown information cards, each representing a single case. On each card you
+    will see an amount of investment a person made, and the outcome that resulted from that investment.
+</p>   
+
+<p>
+    Your task is to compare investments and their outcomes in order to consider whether the investments are
+    profitable or not. After presenting 36 cards, we shall ask for your assessment of the profitability of investing
+    in the product in question.
+</p>
+
+<p>
+    All in all, you will be shown a total of 72 cases, in two lists of 36 pairs, with each list showing the results for
+    one of the two stocks. After the second list we shall also ask which stock you would prefer to invest in using
+    some extra money we shall give you for that decision.
+</p>
+
+<p>
+    Please pay close attention to each of the cases. From time to time, we shall ask you whether the amount
+    invested or the amount obtained in the most recent transaction exceeds a certain value. If you answer this
+    question incorrectly three times, we shall void your participation in the study.
+</p>    
+
+<p>The task will take about 15 minutes, and you will be paid 2.50 GBP plus a small bonus for your participation.</p>
+<p>Devices you can use to take this study:</p>
+
+<ul>
+  <li>Desktop</li>
+  <li>Mobile</li>
+  <li>Tablet</li>
+</ul>
+
+    <p>
+      It is important to pay close attention to the values shown on each card. Occasionally,
+      the presentation will pause, and you will be asked about the card you have just seen.
+      If you answer incorrectly twice, your submission will be voided.
+    </p>
+  
+    <p style="color: red;"><strong>Please don't forget to submit the HIT with a valid completion code</strong></p>
+    <p style="font-style: italic;">&gt;&gt; <em>we won't be able to pay you otherwise</em></p>
+  
+    <p>
+      By clicking 'Agree' you affirm that you're ready and willing to start the study.
+    </p>
+
+    <p>
+      Should you choose not to agree, click 'Don't Agree' to be directed out of the experiment.
+    </p>
+
+</div> 
+
+<form method="post">
+    <input type="hidden" name="error_count" value="0">  <!-- Agree: error_count = 0 -->
+    <button class="btn btn-primary" type="submit">Agree</button>
+</form>
+
+<form method="post" style="margin-top: 20px;">  <!-- Added margin-top to the second form -->
+    <input type="hidden" name="error_count" value="100">  <!-- Disagree: error_count = 100 -->
+    <button class="btn btn-danger" type="submit">Don't Agree</button>
+</form>
+
+{{ endblock }}

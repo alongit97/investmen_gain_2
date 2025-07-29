@@ -167,9 +167,7 @@ class ClientSettingsPage(Page):
             'current_card_time': player.card_time,
 
         }
-
-
-class Instructions(Page):
+class PreTestInstructions(Page):
     form_model = 'player'
     form_fields = ['error_count']
 
@@ -188,6 +186,10 @@ class Instructions(Page):
         if player.error_count == 100:
             player.participant.vars['is_disqualified'] = True
             player.status = 'disagreed'
+
+class Instructions(Page):
+    def is_displayed(player: Player):
+        return not player.participant.vars.get('is_disqualified', False)
 
 class AuthenticationQuestion(Page):
     form_model = 'player'
@@ -385,6 +387,7 @@ class Disqualified(Page):
 
 page_sequence = [
     ClientSettingsPage,
+    PreTestInstructions,
     AuthenticationQuestion,
     Instructions,
     BeforePartA,

@@ -59,13 +59,7 @@
 
 </div> 
 
-<form method="post">
-    <input type="hidden" name="error_count" value="0">  <!-- Agree: error_count = 0 -->
-    <button class="btn btn-primary" type="submit">Agree</button>
-</form>
-
-<form method="post" style="margin-top: 20px;">  <!-- Added margin-top to the second form -->
-    <input type="hidden" name="error_count" value="100">  <!-- Disagree: error_count = 100 -->
-    <button class="btn btn-danger" type="submit">Don't Agree</button>
-</form>
+<div class="text-center mt-4">
+    <button class="btn btn-primary" type="submit">Continue</button>
+</div>
 {% endblock %}
