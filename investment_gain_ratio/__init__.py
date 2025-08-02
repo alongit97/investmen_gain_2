@@ -111,11 +111,18 @@ class Player(BasePlayer):
         [7, "large lose"]
     ]
     )
+
+
+    free_text_response = models.LongStringField(blank=True,
+        label="please define in your own words (at least 5 words) what is the criterion for a profitable investment")
+    
    
     chosen_market = models.IntegerField(choices=[[1, 'Market 1'], [2, 'Market 2']], default = 0)
-    bonus = models.CurrencyField(default=0)
-    random_gain = models.CurrencyField(default=0)
-    random_investment = models.CurrencyField(default=0)
+    chosen_statement = models.IntegerField(choices=[[1, 'Market 1'], [2, 'Market 2']], default = 0)
+    bonus = models.IntegerField(default=0)
+    random_gain = models.IntegerField(default=0)
+    random_investment = models.IntegerField(default=0)
+    accuracy_value = models.IntegerField(default=0)
 
     awareness_answer = models.IntegerField(default=0)
     error_count = models.IntegerField(default=0)
@@ -142,16 +149,6 @@ class Player(BasePlayer):
         self.pairs_A_all = json.dumps(pairs_A)
         self.pairs_B_all = json.dumps(pairs_B)
 
-    # def restore_pairs(self, full_pairs, seed):
-    #     rnd = random.Random(seed)
-    #     pairs_A = full_pairs[:]
-    #     rnd.shuffle(pairs_A)
-    
-    #     pairs_B = [(b, a) for (a, b) in pairs_A]
-    #     rnd.shuffle(pairs_B)
-
-    #     print(pairs_A) 
-    #     print(pairs_B)
 
 class ClientSettingsPage(Page):
     form_model = 'player'
@@ -167,7 +164,15 @@ class ClientSettingsPage(Page):
             'current_card_time': player.card_time,
 
         }
-class PreTestInstructions(Page):
+
+
+
+
+class PreTestInstructions1(Page):
+    def is_displayed(player: Player):
+        return not player.participant.vars.get('is_disqualified', False)    
+
+class PreTestInstructions2(Page):
     form_model = 'player'
     form_fields = ['error_count']
 
@@ -187,9 +192,13 @@ class PreTestInstructions(Page):
             player.participant.vars['is_disqualified'] = True
             player.status = 'disagreed'
 
-class Instructions(Page):
+class Instructions1(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
+
+class Instructions2(Page):
+    def is_displayed(player: Player):
+        return not player.participant.vars.get('is_disqualified', False)        
 
 class AuthenticationQuestion(Page):
     form_model = 'player'
@@ -284,6 +293,12 @@ class EstimationQuestionA(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
+    def before_next_page(player: Player, timeout_happened):
+        if player.estimate_A == 1 or player.estimate_A == 2:
+            player.accuracy_value += 10
+        elif player.estimate_A == 3:
+            player.accuracy_value += 5         
+
 class ShowCardsB(Page):
     template_name = 'investment_gain_ratio/ShowCardsB.html'
     def is_displayed(player: Player):
@@ -332,11 +347,45 @@ class EstimationQuestionB(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
-class ChooseSet(Page):
+    def before_next_page(player: Player, timeout_happened):
+        if player.estimate_B == 1 or player.estimate_B == 2:
+            player.accuracy_value += 10
+        elif player.estimate_B == 3:
+            player.accuracy_value += 5                  
+
+class ChooseMarket(Page):
     form_model = 'player'
     form_fields = ['chosen_market']
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
+
+
+class FreeTextAnswer(Page):
+    form_model = 'player'
+    form_fields = ['free_text_response']
+
+    def error_message(self, values):
+        response = values['free_text_response']
+        word_count = len(response.strip().split())
+        len_count = len(response)
+
+        if word_count < 5:
+            return "Your answer must contain at least 5 words."
+
+        if len_count > 100:
+            return "Your answer must not contain more than 100 tab characters."
+
+        return None  # No error
+
+    def is_displayed(player: Player):
+        return not player.participant.vars.get('is_disqualified', False)
+
+class ChooseStatement(Page):
+    form_model = 'player'
+    form_fields = ['chosen_statement']
+    def is_displayed(player: Player):
+        return not player.participant.vars.get('is_disqualified', False)        
+
 
 class BonusCalculation(Page):
     def is_displayed(player: Player):
@@ -351,12 +400,20 @@ class BonusCalculation(Page):
         player.random_investment = selected_pair[0]
         player.random_gain = selected_pair[1]
         player.bonus = player.random_gain - player.random_investment
-        player.payoff = C.STARTING_MONEY + player.bonus
+        player.payoff = ((C.STARTING_MONEY + player.bonus) / 2) + player.accuracy_value
+   
 
 
 class FinalPage(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
+
+    def vars_for_template(player: Player):
+        return {
+            'total_bonus_points': player.bonus + C.STARTING_MONEY,
+            'bonus_pennies': int((player.bonus + C.STARTING_MONEY) / 2),
+            'payoff_plain': int(player.payoff),
+        }     
 
 
 class WarningPage(Page):
@@ -387,9 +444,11 @@ class Disqualified(Page):
 
 page_sequence = [
     ClientSettingsPage,
-    PreTestInstructions,
+    PreTestInstructions1,
+    PreTestInstructions2,
     AuthenticationQuestion,
-    Instructions,
+    Instructions1,
+    Instructions2,
     BeforePartA,
     ShowCardsA,
     AttentionCheckA,
@@ -408,7 +467,9 @@ page_sequence = [
     WarningPage,
     ShowCardsB,
     EstimationQuestionB,
-    ChooseSet,
+    ChooseMarket,
+    FreeTextAnswer,
+    ChooseStatement,
     BonusCalculation,
     FinalPage,
     Disqualified

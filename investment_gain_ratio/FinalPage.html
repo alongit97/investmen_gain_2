@@ -4,16 +4,18 @@
 {{ block content }}
 
 <p style="font-size: 22px; color: black;">
-The investment chosen is {{player.random_investment}} and the outcome chosen is {{player.random_gain}} for a bonus of {{player.bonus}}
+    The buying cost (picked at random) is {{player.random_investment}} points and the selling price is {{player.random_gain}}
+    points for a bonus of {{player.bonus}} points
 </p>
 
 <p style="font-size: 22px; color: black;">
-This adds up for a total bonus of {{player.payoff}}.
+    Considering the initial bonus of 120 points, this adds up to a bonus of {{total_bonus_points}} points.
+    This bonus is worth {{bonus_pennies}} pennies. In addition, you got {{player.accuracy_value}} pennies 
+    in the tests of the accuracy of your assessments of the profitabilityof the two markets, 
+    making your final bonus {{payoff_plain}} pennies.
 </p>
 
-<p style="font-size: 22px; color: black;">
-Thank you for participating.
-</p>
+<p style="font-size: 22px; color: black;">Thank you for participating.</p>
 
 <a href="https://app.prolific.com/submissions/complete?cc=C19W9JHT" class="btn btn-primary">
     Click here to complete the study on Prolific
