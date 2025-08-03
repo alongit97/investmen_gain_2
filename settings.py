@@ -11,7 +11,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-ac.docx",
-        'investment_before_outcome': True,
     },
 
     {
@@ -20,7 +19,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-ad.docx",
-        'investment_before_outcome': False,
     },
 
     {
@@ -29,7 +27,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-bc.docx",
-        'investment_before_outcome': True,
     },
 
     {
@@ -38,7 +35,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-bd.docx",
-        'investment_before_outcome': False,
     },
 
     {
@@ -47,7 +43,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-ca.docx",
-        'investment_before_outcome': True,
     },
 
     {
@@ -56,7 +51,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-cb.docx",
-        'investment_before_outcome': False,
     },
 
     {
@@ -65,7 +59,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-da.docx",
-        'investment_before_outcome': False,
     },
 
     {
@@ -74,7 +67,6 @@ SESSION_CONFIGS = [
         'num_demo_participants': 1,
         'app_sequence': ['investment_gain_ratio'],
         'file_name': "p2-db.docx",
-        'investment_before_outcome': False,
     }
 ]
 LANGUAGE_CODE = 'en'
@@ -84,7 +76,7 @@ DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []
 ROOMS = []
-DEBUG = True
+DEBUG = False
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable

@@ -114,7 +114,7 @@ class Player(BasePlayer):
 
 
     free_text_response = models.LongStringField(blank=True,
-        label="please define in your own words (at least 5 words) what is the criterion for a profitable investment")
+        label="Please define in your own words (at least 5 words) what is the criterion for a profitable investment")
     
    
     chosen_market = models.IntegerField(choices=[[1, 'Market 1'], [2, 'Market 2']], default = 0)
