@@ -149,7 +149,6 @@ class Player(BasePlayer):
         self.pairs_A_all = json.dumps(pairs_A)
         self.pairs_B_all = json.dumps(pairs_B)
 
-
 class ClientSettingsPage(Page):
     form_model = 'player'
     form_fields = [
@@ -164,9 +163,6 @@ class ClientSettingsPage(Page):
             'current_card_time': player.card_time,
 
         }
-
-
-
 
 class PreTestInstructions1(Page):
     def is_displayed(player: Player):
@@ -359,7 +355,6 @@ class ChooseMarket(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
 
-
 class FreeTextAnswer(Page):
     form_model = 'player'
     form_fields = ['free_text_response']
@@ -386,7 +381,6 @@ class ChooseStatement(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)        
 
-
 class BonusCalculation(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
@@ -402,8 +396,6 @@ class BonusCalculation(Page):
         player.bonus = player.random_gain - player.random_investment
         player.payoff = ((C.STARTING_MONEY + player.bonus) / 2) + player.accuracy_value
    
-
-
 class FinalPage(Page):
     def is_displayed(player: Player):
         return not player.participant.vars.get('is_disqualified', False)
@@ -414,7 +406,6 @@ class FinalPage(Page):
             'bonus_pennies': int((player.bonus + C.STARTING_MONEY) / 2),
             'payoff_plain': int(player.payoff),
         }     
-
 
 class WarningPage(Page):
     #timeout_seconds = 5  # Show this page for 5 seconds only

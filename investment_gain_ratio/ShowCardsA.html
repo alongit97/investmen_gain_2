@@ -8,26 +8,23 @@
     <div id="pairs-container">
        {% for pair in pairs_A %}
         <div class="pair" id="pair_{{ forloop.counter0 }}" style="display: none;">
-            <!-- transition-card, investment, profit: DELETE ALL -->
-
             <!-- New single card -->
-            <div class="single-card">
-                A person bought Stock A for&nbsp;<strong>{{ pair.0 }}</strong>&nbsp;and received&nbsp;<strong>{{ pair.1 }}</strong>&nbsp;when selling it.
+            <div class="single-card">       
+                Following the advice of broker A, a person bought a bundle of stocks for 
+                <strong>{{ pair.0 }}</strong> 
+                and received 
+                <strong>{{ pair.1 }}</strong> 
+                when selling it.
             </div>
         </div>
-        {% endfor %}
-
-        <!-- Final oTree Next Button (initially hidden) 
-        <div id="final-next-button" style="display: none; text-align: center; margin-top: 20px;">
-            <button type="submit" class="next-button">Next</button>
-        </div>-->
+       {% endfor %}
     </div>
 </div>
 
 <style>
     .single-card {
         width: 100%;
-        height: 100%;
+        height: auto; /* Instead of 100% to avoid text being squeezed */
         padding: 30px;
         border-radius: 10px;
         background-color: #eef4ff;
@@ -35,13 +32,13 @@
         font-size: 1.2em;
         font-weight: bold;
         text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        display: block; /* Change from flex to block for better text flow */
+        line-height: 1.5;
         opacity: 0;
         transform: scale(0.95);
         transition: opacity 0.5s ease, transform 0.5s ease;
     }
+
 
     .single-card.show {
         opacity: 1;
