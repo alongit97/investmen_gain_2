@@ -434,7 +434,7 @@ class Disqualified(Page):
         return {'message': 'You have been disqualified from the experiment due to too many incorrect answers.'}
 
 page_sequence = [
-    ClientSettingsPage,
+    #ClientSettingsPage,
     PreTestInstructions1,
     PreTestInstructions2,
     AuthenticationQuestion,
