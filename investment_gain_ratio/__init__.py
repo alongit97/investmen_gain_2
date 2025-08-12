@@ -435,7 +435,6 @@ class Disqualified(Page):
 
 page_sequence = [
     #ClientSettingsPage,
-    ShowCardsA,
     PreTestInstructions1,
     PreTestInstructions2,
     AuthenticationQuestion,
